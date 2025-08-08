@@ -79,12 +79,25 @@ function setLighting() {
   scene.add(directionalLight);
 }
 
+let clock = new THREE.Clock();
+let lastTime = 0;
+const targetFPS = 60;
+const interval = 1000 / targetFPS;
+
 // Animation loop
 function animate() {
   requestAnimationFrame(animate);
-  controls.update()
-  renderer.render(scene, camera);
-  stats.update();
+
+  let currentTime = clock.getElapsedTime() * 1000; // Convert to milliseconds
+  let delta = currentTime - lastTime;
+
+  if (delta > interval) {
+    // Update and render only when enough time has passed
+    controls.update()
+    renderer.render(scene, camera);
+    lastTime = currentTime - (delta % interval); // Adjust lastTime to account for excess time
+    stats.update();
+  }  
 }
 
 function onWindowResize() {
