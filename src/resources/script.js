@@ -2,12 +2,18 @@ import * as THREE from 'https://unpkg.com/three@0.178.0/build/three.module.js';
 import { GLTFLoader } from "https://unpkg.com/three@0.178.0/examples/jsm/loaders/GLTFLoader.js";
 import { OrbitControls } from 'https://unpkg.com/three@0.178.0/examples/jsm/controls/OrbitControls.js';
 import { DRACOLoader } from 'https://unpkg.com/three@0.178.0/examples/jsm/loaders/DRACOLoader.js';
+import Stats from 'https://unpkg.com/three@0.178.0/examples/jsm/libs/stats.module.js';
+
+
 
 const loader = new GLTFLoader();
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100);
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 const scene = new THREE.Scene();
-const renderer = new THREE.WebGLRenderer({antialias: true});
+const renderer = new THREE.WebGLRenderer({antialias: false});
 const controls = new OrbitControls(camera, renderer.domElement);
+
+const stats = new Stats();
+document.body.appendChild(stats.dom);
 
 init()
 
@@ -16,8 +22,10 @@ function init() {
   setCamera();
   setRenderer();
   setLighting();
-  document.body.appendChild(renderer.domElement);
-  window.addEventListener('resize', onWindowResize);  
+
+  document.querySelector('#threejs-container').append(renderer.domElement)
+
+  window.addEventListener('resize', onWindowResize, false);  
 
   controls.maxPolarAngle = Math.PI / 2;
   controls.minDistance = 2;
@@ -49,7 +57,7 @@ function loadGlbFile() {
 }
 
 function setCamera() {
-  camera.position.z = 2;
+  camera.position.z = 5;
 }
 
 function setRenderer() {
@@ -73,12 +81,15 @@ function setLighting() {
 
 // Animation loop
 function animate() {
+  requestAnimationFrame(animate);
   controls.update()
   renderer.render(scene, camera);
+  stats.update();
 }
 
 function onWindowResize() {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.render(scene, camera);
 }
