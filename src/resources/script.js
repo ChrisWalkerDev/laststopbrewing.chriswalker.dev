@@ -2,18 +2,12 @@ import * as THREE from 'https://unpkg.com/three@0.178.0/build/three.module.js';
 import { GLTFLoader } from "https://unpkg.com/three@0.178.0/examples/jsm/loaders/GLTFLoader.js";
 import { OrbitControls } from 'https://unpkg.com/three@0.178.0/examples/jsm/controls/OrbitControls.js';
 import { DRACOLoader } from 'https://unpkg.com/three@0.178.0/examples/jsm/loaders/DRACOLoader.js';
-import Stats from 'https://unpkg.com/three@0.178.0/examples/jsm/libs/stats.module.js';
-
-
 
 const loader = new GLTFLoader();
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, .001, 1000);
 const scene = new THREE.Scene();
 const renderer = new THREE.WebGLRenderer({antialias: false});
 const controls = new OrbitControls(camera, renderer.domElement);
-
-const stats = new Stats();
-document.body.appendChild(stats.dom);
 
 init()
 
@@ -96,7 +90,6 @@ function animate() {
     controls.update()
     renderer.render(scene, camera);
     lastTime = currentTime - (delta % interval); // Adjust lastTime to account for excess time
-    stats.update();
   }  
 }
 
