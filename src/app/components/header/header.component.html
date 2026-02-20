@@ -1,0 +1,24 @@
+<header class="app-header">
+
+  <!-- Centered Logo -->
+  <div class="logo">
+    <img src="assets/icons/last_stop_brewing_logo.svg" alt="Logo">
+  </div>
+
+  <!-- Hamburger Menu -->
+  <button class="hamburger-button" (click)="toggleMenu()">
+    <img src="assets/LastStopBrewingX_1.png" class="hamburger-line line1" [class.open]="isActive">
+    <img src="assets/LastStopBrewingX_2.png" class="hamburger-line line2" [class.open]="isActive">
+  </button>
+
+  <!-- Dropdown Menu -->
+  <div class="full-screen-menu" [class.open]="isActive">
+    <ul>
+      <li><a href="#">Home</a></li>
+      <li><a href="#">Beers</a></li>
+      <li><a href="#">Food</a></li>
+      <li><a href="#">Events</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+  </div>
+</header>

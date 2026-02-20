@@ -1,0 +1,10 @@
+@if (!loading) {
+  <div class="age-gate" aria-modal="true" aria-label="Age verification">
+    <img src="/assets/icons/last_stop_brewing_logo.svg" alt="Last Stop Brewing Logo" class="age-gate__logo">
+    <p class="age-gate__question">ARE YOU 21 OR OLDER?</p>
+    <div class="age-gate__actions">
+      <button class="age-gate__actions-yes" (click)="confirmYes()">YES</button>
+      <button class="age-gate__actions-no" (click)="confirmNo()">NO</button>
+    </div>
+  </div>
+}

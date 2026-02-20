@@ -1,0 +1,64 @@
+.age-gate {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background-color: #f8f6f2;
+  min-width: 320px;
+}
+
+.age-gate__logo {
+  width: 300px;
+  max-width: 300px;
+}
+
+.age-gate__question {
+  // font-family: 'Lato', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  margin-top: 2rem;
+}
+
+.age-gate__actions {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.age-gate__actions button {
+  border-radius: 0;
+}
+
+.age-gate__actions-yes {
+  background-color: #b22222; /* deep red */
+  color: white;
+  border: none;
+  padding: 12px 28px;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.age-gate__actions-yes:hover {
+  background-color: #8b1a1a;
+}
+
+.age-gate__actions-no {
+  background: transparent;
+  border: 2px solid #333;
+  padding: 12px 28px;
+  font-size: 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.age-gate__legal {
+  margin-top: 2rem;
+  font-size: 0.8rem;
+  color: #777;
+}

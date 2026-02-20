@@ -1,17 +1,25 @@
-FROM node:20.14-alpine
+FROM node:slim AS build
 
 # Create app directory
-WORKDIR /app
+WORKDIR /dist/src/app
 
-# Install app dependencies 
-COPY package*.json ./
+# Remove cache
+RUN npm cache clean --force
 
-# Run npm install
-RUN npm install
-
-# Bundle app source
+# Add the source code to app
 COPY . .
 
-EXPOSE 8080
+# Install all the dependencies
+RUN npm install
 
-CMD [ "npm", "start" ]
+# Generate the build of the application
+RUN npm run build --prod
+
+# Defining nginx image to be used
+FROM nginx:latest as ngi
+
+# Copying compiled code and nginx config to different folder
+COPY --from=build /dist/src/app/dist/laststopbrewing.chriswalker.dev/browser /usr/share/nginx/html
+COPY /nginx.conf  /etc/nginx/templates/nginx.conf.template
+
+EXPOSE 8080

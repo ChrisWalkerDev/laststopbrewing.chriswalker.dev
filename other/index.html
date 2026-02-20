@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property='og:title' content="Last Stop Brewing" />
+    <meta property='og:image' content="favicon.svg"/>
+    <meta property='og:description' content='Last Stop Brewing Development Portfolio'/>
+    <meta property='og:url' content='laststopbrewing.chriswalker.dev'/>
+    <title>Last Stop Brewing</title>
+    <link rel="shortcut icon" type="image/svg+xml" href="favicon.svg"/>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html, body {
+        height: 100vh;
+        width: 100vw;
+      }
+      #threejs-container {
+        position: block;
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="threejs-container"></div>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://unpkg.com/three@0.178.0/build/three.module.js",
+          "three/addons/": "https://unpkg.com/three@0.178.0/examples/jsm/"
+        }
+      }
+    </script>
+    </script>
+    <script src="resources/script.js" type="module"></script>
+  </body>
+</html>
