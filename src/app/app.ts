@@ -21,7 +21,7 @@ export class App implements OnInit {
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
     ).subscribe((event: NavigationEnd) => {
-      this.isAgeGate = event.url === '/age-gate';
+      this.isAgeGate = event.url.includes('/age-gate');
     });
   }
 }
