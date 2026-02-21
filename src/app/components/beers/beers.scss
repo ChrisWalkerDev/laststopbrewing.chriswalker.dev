@@ -1,9 +1,11 @@
 html, body {
   height: 100vh;
   margin: 0;
+  overflow: auto;
 }
 
 .app-beers {
     height: calc(100vh - 110px); /* full viewport height minus header */
     width: 100%;
+    -webkit-overflow-scrolling: touch;
 }
