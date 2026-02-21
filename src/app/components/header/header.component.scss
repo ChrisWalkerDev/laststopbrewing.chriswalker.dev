@@ -5,13 +5,33 @@
   justify-content: space-between; /* logo stays center if left/right space equal */
   padding: 10px 20px;
   background-color: #fff;
-  position: relative;
+  position: sticky;
+  top: 0;
   border-bottom: 1px solid #ddd;
+}
+
+.header-menu {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; 
+  gap: 20px;
+  font-size: 25px;
+}
+
+.header-menu a {
+  color: #333;
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.3s;
+}
+
+.header-menu a:hover {
+  color: #c00e14;
 }
 
 /* Logo styling */
 .logo img {
-  height: 75px; /* adjust as needed */
+  height: 75px;
   object-fit: contain;
 }
 
@@ -29,41 +49,9 @@
 .hamburger-line {
   height: 14px;
   background: transparent;
-  transition: transform 0.6s ease-in-out; /* smooth transition over 0.5s */
+  transition: transform 0.5s ease-in-out;
   transform-origin: center;
   position: relative;
-}
-
-/* Dropdown menu */
-.menu {
-  position: absolute;
-  top: 70px; /* below header */
-  right: 20px;
-  background-color: #fff;
-  border-radius: 8px;
-  padding: 10px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-  display: none;
-}
-
-.menu.open {
-  display: block;
-}
-
-/* Menu list styling */
-.menu ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.menu li a {
-  text-decoration: none;
-  color: #333;
-  font-weight: 500;
 }
 
 /* Rotate lines into X when open */
@@ -118,7 +106,13 @@
 }
 
 .full-screen-menu a:hover {
-  color: #ff9900;
+  color: #c00e14;
+}
+
+@media (max-width: 767px) {
+  .header-menu {
+    display: none; /* hide menu on small screens */
+  }
 }
 
 @media (min-width: 768px) {

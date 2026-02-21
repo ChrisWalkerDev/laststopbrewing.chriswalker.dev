@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 
 @Component({
@@ -13,13 +13,17 @@ import { MatButtonModule } from '@angular/material/button';
 export class AgeGateComponent implements OnInit {
 
   loading = true;
+  returnUrl: string | null = null;
 
-  constructor(private router: Router) {}
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router) {}
 
   ngOnInit(): void {
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
     const verified = sessionStorage.getItem('ageVerified') === 'true';
     if (verified) {
-      this.router.navigate(['/']);
+      this.router.navigateByUrl(this.returnUrl!);
     } else {
       this.loading = false;
     }
@@ -27,7 +31,7 @@ export class AgeGateComponent implements OnInit {
 
   confirmYes(): void {
     sessionStorage.setItem('ageVerified', 'true');
-    this.router.navigate(['/']);
+    this.router.navigateByUrl(this.returnUrl!);
   }
 
   confirmNo(): void {

@@ -2,7 +2,7 @@
 
   <!-- Centered Logo -->
   <div class="logo">
-    <img src="assets/icons/last_stop_brewing_logo.svg" alt="Logo">
+    <a href="/"><img src="assets/icons/last_stop_brewing_logo.svg" alt="Logo"></a>
   </div>
 
   <!-- Hamburger Menu -->
@@ -11,14 +11,24 @@
     <img src="assets/LastStopBrewingX_2.png" class="hamburger-line line2" [class.open]="isActive">
   </button>
 
+  <div class="header-menu">
+    <a href="">Home</a>
+    <a href="beers">Beers</a>
+    <a href="food">Food</a>
+    <a href="events">Events</a>
+    <a href="about">About</a>
+    <a href="contact">Contact</a>
+  </div>
+
   <!-- Dropdown Menu -->
   <div class="full-screen-menu" [class.open]="isActive">
     <ul>
-      <li><a href="#">Home</a></li>
-      <li><a href="#">Beers</a></li>
-      <li><a href="#">Food</a></li>
-      <li><a href="#">Events</a></li>
-      <li><a href="#">Contact</a></li>
+      <li><a href="">Home</a></li>
+      <li><a href="beers">Beers</a></li>
+      <li><a href="food">Food</a></li>
+      <li><a href="events">Events</a></li>
+      <li><a href="about">About</a></li>
+      <li><a href="contact">Contact</a></li>
     </ul>
   </div>
 </header>

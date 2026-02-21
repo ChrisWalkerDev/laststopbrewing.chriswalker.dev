@@ -1,0 +1,9 @@
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+.app-beers {
+    height: calc(100vh - 110px); /* full viewport height minus header */
+    width: 100%;
+}
