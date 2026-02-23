@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <title>Last Stop Brewing</title>
@@ -7,8 +8,45 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="https://fonts.googleapis.com/css2?family=Rock+Salt" rel="stylesheet">
   <link rel="icon" type="image/png" sizes="48x48" href="/assets/icons/last_stop_brewing_logo.svg">
+  <style>
+    /* styles.css */
+    .loader-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .loader {
+      border: 16px solid #f3f3f3;
+      border-top: 16px solid #3498db;
+      /* Blue spinner */
+      border-radius: 50%;
+      width: 120px;
+      height: 120px;
+      animation: spin 2s linear infinite;
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
 </head>
+
 <body>
-  <app-root></app-root>
+  <app-root>
+    <div class="loader-container">
+      <div class="loader"></div>
+      <p>Loading Last Stop Brewing...</p>
+    </div>
+  </app-root>
 </body>
+
 </html>
