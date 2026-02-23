@@ -3,7 +3,7 @@ import { RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
-import { HeaderComponent } from "./components/header/header.component";
+import { HeaderComponent } from "./core/header/header.component";
 
 @Component({
   selector: 'app-root',
