@@ -2,11 +2,13 @@
 .app-header {
   display: flex;
   align-items: center;
-  justify-content: space-between; /* logo stays center if left/right space equal */
-  padding: 10px 20px;
+  justify-content: space-between;
   background-color: #fff;
-  position: sticky;
   top: 0;
+  position: fixed;
+  z-index: 1000;
+  width: 100%;
+  height: 100px;
 }
 
 .header-menu {
@@ -31,6 +33,7 @@
 /* Logo styling */
 .logo img {
   height: 75px;
+  padding-left: 20px;
   object-fit: contain;
 }
 
@@ -38,7 +41,7 @@
 .hamburger-button {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 15px;
   background: none;
   border: none;
   cursor: pointer;
@@ -51,15 +54,16 @@
   transition: transform 0.5s ease-in-out;
   transform-origin: center;
   position: relative;
+  padding-right: 20px;
 }
 
 /* Rotate lines into X when open */
 .line1.open {
-  transform: rotate(35deg) translate(5px, 5px);
+  transform: rotate(35deg) translate(15px, 15px);
 }
 
 .line2.open {
-  transform: rotate(-35deg) translate(8px, -8px);
+  transform: rotate(-35deg) translate(14px, -14px);
 }
 
 /* Full-screen menu below header */

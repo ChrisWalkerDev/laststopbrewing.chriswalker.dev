@@ -12,23 +12,23 @@
   </button>
 
   <div class="header-menu">
-    <a href="">Home</a>
-    <a href="beers">Beers</a>
-    <a href="food">Food</a>
-    <a href="events">Events</a>
-    <a href="about">About</a>
-    <a href="contact">Contact</a>
+    <a routerLink="" >Home</a>
+    <a routerLink="beers">Beers</a>
+    <a routerLink="food">Food</a>
+    <a routerLink="events">Events</a>
+    <a routerLink="about">About</a>
+    <a routerLink="contact">Contact</a>
   </div>
 
   <!-- Dropdown Menu -->
   <div class="full-screen-menu" [class.open]="isActive">
-    <ul>
-      <li><a href="">Home</a></li>
-      <li><a href="beers">Beers</a></li>
-      <li><a href="food">Food</a></li>
-      <li><a href="events">Events</a></li>
-      <li><a href="about">About</a></li>
-      <li><a href="contact">Contact</a></li>
+    <ul (click)="toggleMenu()">
+      <li><a routerLink="">Home</a></li>
+      <li><a routerLink="beers">Beers</a></li>
+      <li><a routerLink="food">Food</a></li>
+      <li><a routerLink="events">Events</a></li>
+      <li><a routerLink="about">About</a></li>
+      <li><a routerLink="contact">Contact</a></li>
     </ul>
   </div>
 </header>

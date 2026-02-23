@@ -2,4 +2,7 @@
     <app-header></app-header>
 }
 
-<router-outlet #outlet="outlet"></router-outlet> 
+<div [class.header-margin]="!isAgeGate" >
+    <router-outlet #outlet="outlet"></router-outlet> 
+</div>
+
