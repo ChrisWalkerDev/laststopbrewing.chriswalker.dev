@@ -42,7 +42,7 @@
 .hamburger-button {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 6px;
   background: none;
   border: none;
   cursor: pointer;
@@ -60,11 +60,11 @@
 
 /* Rotate lines into X when open */
 .line1.open {
-  transform: rotate(35deg) translate(15px, 15px);
+  transform: rotate(35deg) translate(8px, 18px);
 }
 
 .line2.open {
-  transform: rotate(-35deg) translate(14px, -14px);
+  transform: rotate(-30deg) translate(5px, -10px);
 }
 
 /* Full-screen menu below header */
