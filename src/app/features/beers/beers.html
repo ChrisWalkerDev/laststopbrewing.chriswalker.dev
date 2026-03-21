@@ -1,3 +1,7 @@
 <div class="app-beers">
-    <iframe src="https://business.untappd.com/embeds/iframes/46552/172250"></iframe>    
+    <iframe 
+        [attr.src]="iframeUrl"
+        [attr.title]="'Untappd Beer Menu - ' + businessName"
+        loading="lazy">
+    </iframe>
 </div>

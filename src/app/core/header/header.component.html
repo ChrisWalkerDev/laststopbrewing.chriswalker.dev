@@ -13,23 +13,23 @@
   </button>
 
   <div class="header-menu">
-    <a routerLink="">Home</a>
-    <a routerLink="beers">Beers</a>
-    <a routerLink="food">Food</a>
-    <a routerLink="events">Events</a>
-    <a routerLink="about">About</a>
-    <a routerLink="contact">Contact</a>
+    <a routerLink="" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}">Home</a>
+    <a routerLink="beers" routerLinkActive="active-link">Beers</a>
+    <a routerLink="food" routerLinkActive="active-link">Food</a>
+    <a routerLink="events" routerLinkActive="active-link">Events</a>
+    <a routerLink="about" routerLinkActive="active-link">About</a>
+    <a routerLink="contact" routerLinkActive="active-link">Contact</a>
   </div>
 
   <!-- Dropdown Menu -->
   <div class="full-screen-menu" [class.open]="isActive">
     <ul (click)="toggleMenu()">
-      <li><a routerLink="">Home</a></li>
-      <li><a routerLink="beers">Beers</a></li>
-      <li><a routerLink="food">Food</a></li>
-      <li><a routerLink="events">Events</a></li>
-      <li><a routerLink="about">About</a></li>
-      <li><a routerLink="contact">Contact</a></li>
+      <li><a routerLink="" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}">Home</a></li>
+      <li><a routerLink="beers" routerLinkActive="active-link">Beers</a></li>
+      <li><a routerLink="food" routerLinkActive="active-link">Food</a></li>
+      <li><a routerLink="events" routerLinkActive="active-link">Events</a></li>
+      <li><a routerLink="about" routerLinkActive="active-link">About</a></li>
+      <li><a routerLink="contact" routerLinkActive="active-link">Contact</a></li>
     </ul>
   </div>
 </header>
