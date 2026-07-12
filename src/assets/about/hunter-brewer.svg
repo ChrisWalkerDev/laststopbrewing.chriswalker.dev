@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" role="img" aria-labelledby="title desc">
+  <title id="title">Hunter Brewer Placeholder</title>
+  <desc id="desc">Placeholder portrait image for Hunter, brewer.</desc>
+  <rect width="1200" height="800" fill="#7c2d12" />
+  <circle cx="600" cy="330" r="170" fill="#fdba74" />
+  <rect x="430" y="500" width="340" height="180" rx="80" fill="#ffedd5" />
+  <text x="600" y="140" text-anchor="middle" fill="#fff7ed" font-size="70" font-family="Segoe UI, sans-serif">Hunter</text>
+  <text x="600" y="730" text-anchor="middle" fill="#fed7aa" font-size="42" font-family="Segoe UI, sans-serif">Brewer Placeholder</text>
+</svg>

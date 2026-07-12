@@ -1,0 +1,26 @@
+<section class="age-gate" aria-labelledby="age-gate-heading">
+  <img
+    class="age-gate__brand-icon"
+    ngSrc="favicon.ico"
+    width="64"
+    height="64"
+    [style.width.px]="brandIconWidthPx()"
+    alt="Last Stop Brewing logo"
+    priority
+  />
+
+  <h1 id="age-gate-heading" #ageGateHeadingElement>
+    {{ promptText() }}
+  </h1>
+
+  <p class="age-gate__description">You must confirm your age to continue.</p>
+
+  <div class="age-gate__actions" role="group" aria-label="Age verification options">
+    <button type="button" class="age-gate__button age-gate__button--yes" (click)="approveAccess()">
+      YES
+    </button>
+    <button type="button" class="age-gate__button age-gate__button--no" (click)="denyAccess()">
+      NO
+    </button>
+  </div>
+</section>

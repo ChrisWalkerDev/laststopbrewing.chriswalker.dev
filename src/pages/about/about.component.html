@@ -1,0 +1,34 @@
+<section class="about-page" aria-labelledby="about-page-heading">
+  <h1 id="about-page-heading" class="about-page__sr-only">{{ viewModel().title }}</h1>
+
+  <div class="about-page__sections" aria-label="About page sections">
+    @for (section of viewModel().sections; track section.id) {
+      <article
+        class="about-page__section"
+        [attr.aria-labelledby]="'about-section-title-' + section.id"
+      >
+        <div class="about-page__section-inner">
+          <figure class="about-page__media">
+            <img
+              class="about-page__image"
+              [ngSrc]="section.imageSrc"
+              [alt]="section.imageAlt"
+              [width]="section.imageWidth"
+              [height]="section.imageHeight"
+              [loading]="section.order <= 2 ? 'eager' : 'lazy'"
+              decoding="async"
+            />
+          </figure>
+
+          <div class="about-page__section-content">
+            <h2 class="about-page__section-title" [id]="'about-section-title-' + section.id">
+              {{ section.title }}
+            </h2>
+            <p class="about-page__section-subtitle">{{ section.subtitle }}</p>
+            <p class="about-page__section-description">{{ section.description }}</p>
+          </div>
+        </div>
+      </article>
+    }
+  </div>
+</section>

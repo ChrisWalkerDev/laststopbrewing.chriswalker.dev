@@ -1,0 +1,36 @@
+<section class="access-denied" aria-labelledby="access-denied-heading">
+  <img
+    class="access-denied__brand-icon"
+    ngSrc="favicon.ico"
+    width="64"
+    height="64"
+    [style.width.px]="brandIconWidthPx()"
+    alt="Last Stop Brewing logo"
+    priority
+  />
+
+  <h1 id="access-denied-heading" #accessDeniedHeadingElement>Access Denied (21+)</h1>
+  <p class="access-denied__description">You cannot view this content unless you are 21 or older.</p>
+
+  <form class="access-denied__form" (submit)="submitDateOfBirth($event)" novalidate>
+    <label for="dob">Date of birth</label>
+    <input
+      class="access-denied__field"
+      id="dob"
+      type="date"
+      [formControl]="dobControl"
+      autocomplete="bday"
+      aria-describedby="dob-help dob-status"
+    />
+
+    <p id="dob-help" class="access-denied__help">
+      Enter your date of birth to re-verify age eligibility.
+    </p>
+
+    <button class="access-denied__submit" type="submit">Verify Age</button>
+  </form>
+
+  <p id="dob-status" class="access-denied__status" aria-live="polite">
+    {{ statusMessage() }}
+  </p>
+</section>

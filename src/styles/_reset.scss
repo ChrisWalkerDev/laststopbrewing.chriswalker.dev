@@ -1,0 +1,22 @@
+// Minimal CSS reset — normalise cross-browser defaults
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-base);
+  color: var(--color-text);
+  background-color: var(--color-bg);
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}

@@ -1,0 +1,50 @@
+<section class="location-page" aria-labelledby="location-heading">
+  <div class="location-page__layout">
+    <article class="location-page__hours-panel" aria-labelledby="location-hours-heading">
+      <h1 id="location-heading" class="location-page__title">{{ viewModel().title }}</h1>
+
+      <h2 id="location-hours-heading" class="location-page__section-title">Store Hours</h2>
+      <dl class="location-page__hours-list">
+        @for (entry of viewModel().hours; track entry.day) {
+          <div class="location-page__hours-item">
+            <dt>{{ entry.day }}</dt>
+            <dd>{{ entry.hours }}</dd>
+          </div>
+        }
+      </dl>
+
+      <h2 class="location-page__section-title">Address</h2>
+      <address class="location-page__address">
+        <a
+          class="location-page__address-link"
+          [href]="mapPageUrl"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Open Last Stop Brewing location in Google Maps"
+        >
+          @for (line of viewModel().addressLines; track line) {
+            <span>{{ line }}</span>
+          }
+        </a>
+      </address>
+
+      <h2 class="location-page__section-title">Phone</h2>
+      <p class="location-page__phone">
+        <a class="location-page__phone-link" [href]="phoneHref">{{ phoneNumber }}</a>
+      </p>
+    </article>
+
+    <section class="location-page__map-panel" aria-labelledby="location-map-heading">
+      <h2 id="location-map-heading" class="location-page__section-title">Map</h2>
+      <div class="location-page__map-frame-wrap">
+        <iframe
+          class="location-page__map-frame"
+          [src]="mapEmbedSrc"
+          [title]="mapEmbedTitle"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+        ></iframe>
+      </div>
+    </section>
+  </div>
+</section>

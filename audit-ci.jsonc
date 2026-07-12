@@ -1,0 +1,14 @@
+{
+  "$schema": "https://github.com/IBM/audit-ci/raw/main/docs/schema.json",
+  // Fail on moderate, high, and critical CVEs. Low and info are informational only.
+  "moderate": true,
+  "skip-dev": false,
+  "report-type": "important",
+  // Allowlisted CVEs are dev-only build tool transitive deps pinned by @angular/build.
+  // No fix exists in a stable Angular 22 release yet — revisit when 22.1.0 stable ships.
+  "allowlist": [
+    "GHSA-4x5r-pxfx-6jf8", // @babel/core arbitrary file read — via @angular/build & @angular/compiler-cli
+    "GHSA-x9g3-xrwr-cwfg", // piscina prototype pollution — via @angular/build
+    "GHSA-g7r4-m6w7-qqqr"  // esbuild arbitrary file read on Windows — via @angular/build
+  ]
+}

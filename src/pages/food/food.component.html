@@ -1,0 +1,27 @@
+<section class="food-page" aria-label="Food menu image pages">
+  <div class="food-page__menu" role="list" aria-label="Food menu image pages">
+    @for (image of viewModel().images; track image.id) {
+      <figure class="food-page__item" role="listitem">
+        <img
+          class="food-page__menu-image"
+          [ngSrc]="image.src"
+          [attr.srcset]="image.srcset"
+          [alt]="image.alt"
+          [width]="image.width"
+          [height]="image.height"
+          [sizes]="imageSizes"
+          [loading]="image.order === 1 ? 'eager' : 'lazy'"
+          decoding="async"
+          (load)="onImageLoad(image.id)"
+          (error)="onImageError(image.id)"
+        />
+      </figure>
+    }
+  </div>
+
+  @if (viewModel().failedImageCount > 0) {
+    <aside class="food-page__fallback" aria-live="polite">
+      <p>{{ fallbackMessage }}</p>
+    </aside>
+  }
+</section>

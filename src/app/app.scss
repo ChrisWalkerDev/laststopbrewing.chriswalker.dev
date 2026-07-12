@@ -1,3 +1,196 @@
-.header-margin {
-    margin-top: 100px;
+// Skip-navigation link — visually hidden until focused (WCAG 2.1 AA SC 2.4.1)
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 9999;
+  padding: var(--spacing-base);
+  background-color: var(--color-primary);
+  color: #fff;
+  text-decoration: none;
+  border-radius: 0 0 4px 4px;
+
+  &:focus {
+    left: 0;
+  }
+}
+
+:host {
+  display: block;
+}
+
+.app-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--header-z-index);
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: var(--spacing-base);
+  min-height: var(--header-height);
+  padding: 0 var(--spacing-base);
+  background-color: var(--color-bg);
+}
+
+.app-brand {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.app-desktop-nav {
+  display: inline-flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: var(--spacing-lg);
+}
+
+.app-nav-link,
+.app-mobile-nav-link {
+  color: var(--color-text);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color var(--header-motion-duration) ease;
+
+  &:hover,
+  &:focus-visible,
+  &.active {
+    color: var(--color-primary);
+  }
+}
+
+.app-mobile-toggle {
+  display: none;
+  justify-self: end;
+  width: 3rem;
+  height: 3rem;
+  border: 0;
+  background-color: transparent;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+
+  &:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 0.2rem;
+    border-radius: 0.35rem;
+  }
+}
+
+.app-mobile-toggle-icon {
+  position: relative;
+  width: 2.78rem;
+  height: 2.75rem;
+}
+
+.menu-line {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+  transform-origin: center;
+  transition:
+    transform var(--header-motion-duration) ease,
+    opacity var(--header-motion-duration) ease,
+    top var(--header-motion-duration) ease;
+}
+
+.last-stop-brewing-x-1 {
+  top: calc(50% - 1rem);
+  transform: translateY(-50%);
+}
+
+.last-stop-brewing-x-2 {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.last-stop-brewing-x-3 {
+  top: calc(50% + 1rem);
+  transform: translateY(-50%);
+}
+
+.app-mobile-toggle-icon.is-open {
+  .last-stop-brewing-x-1 {
+    top: 50%;
+    transform: translateY(-100%) rotate(35deg);
+  }
+
+  .last-stop-brewing-x-2 {
+    top: 50%;
+    transform: translateY(-100%) rotate(-35deg);
+  }
+}
+
+.app-mobile-overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: var(--header-overlay-z-index);
+  background-color: var(--color-bg);
+  display: flex;
+  justify-content: center;
+  padding: calc(var(--header-height) + var(--spacing-xl)) var(--spacing-lg) var(--spacing-xl);
+}
+
+.app-mobile-nav {
+  width: min(28rem, 100%);
+  background-color: var(--color-bg);
+  border-radius: 0.75rem;
+  padding: var(--spacing-xl);
+  display: grid;
+  gap: var(--spacing-lg);
+  align-content: start;
+  justify-items: center;
+}
+
+.app-mobile-nav-link {
+  font-size: 1.125rem;
+  text-align: center;
+}
+
+main#main-content {
+  min-height: calc(100dvh - var(--header-height));
+}
+
+main#main-content.with-header {
+  margin-top: var(--header-height);
+}
+
+@media (max-width: 768px) {
+  .app-desktop-nav {
+    display: none;
+  }
+
+  .app-mobile-toggle {
+    display: inline-flex;
+  }
+}
+
+@media (min-width: 769px) {
+  .app-mobile-overlay {
+    display: none;
+  }
+}
+
+.app-header.reduced-motion {
+  .menu-line,
+  .app-nav-link,
+  .app-mobile-nav-link {
+    transition: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .menu-line,
+  .app-nav-link,
+  .app-mobile-nav-link {
+    transition: none;
+  }
 }

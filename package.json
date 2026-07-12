@@ -1,16 +1,26 @@
 {
-  "name": "laststopbrewing.chriswalker.dev",
-  "version": "1.0.0",
+  "name": "angular-website",
+  "version": "0.0.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "test:ci": "ng test --watch=false",
+    "test:watch": "ng test --watch",
+    "lint": "ng lint",
+    "lint:fix": "ng lint --fix",
+    "format": "prettier --write \"src/**/*.{ts,html,scss,json}\"",
+    "format:check": "prettier --check \"src/**/*.{ts,html,scss,json}\"",
+    "prepare": "husky"
   },
   "prettier": {
     "printWidth": 100,
     "singleQuote": true,
+    "trailingComma": "es5",
+    "bracketSpacing": true,
+    "semi": true,
     "overrides": [
       {
         "files": "*.html",
@@ -22,25 +32,34 @@
   },
   "private": true,
   "packageManager": "npm@11.8.0",
+  "engines": {
+    "node": "^22.22.3 || ^24.15.0 || >=26.0.0"
+  },
   "dependencies": {
-    "@angular/animations": "^21.1.4",
-    "@angular/cdk": "^21.1.4",
-    "@angular/common": "^21.1.0",
-    "@angular/compiler": "^21.1.0",
-    "@angular/core": "^21.1.0",
-    "@angular/forms": "^21.1.0",
-    "@angular/material": "^21.1.4",
-    "@angular/platform-browser": "^21.1.0",
-    "@angular/router": "^21.1.0",
+    "@angular/common": "^22.0.2",
+    "@angular/compiler": "^22.0.2",
+    "@angular/core": "^22.0.2",
+    "@angular/forms": "^22.0.2",
+    "@angular/platform-browser": "^22.0.2",
+    "@angular/router": "^22.0.2",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"
   },
   "devDependencies": {
-    "@angular/build": "^21.1.3",
-    "@angular/cli": "^21.1.3",
-    "@angular/compiler-cli": "^21.1.0",
+    "@angular/build": "^22.0.3",
+    "@angular/cli": "^22.0.3",
+    "@angular/compiler-cli": "^22.0.2",
+    "@eslint/js": "^10.0.1",
+    "@vitest/coverage-v8": "^4.1.7",
+    "angular-eslint": "^22.0.0",
+    "eslint": "^10.0.3",
+    "eslint-config-prettier": "^10.1.8",
+    "husky": "^9.1.7",
     "jsdom": "^27.1.0",
-    "typescript": "~5.9.2",
-    "vitest": "^4.0.8"
+    "prettier": "^3.8.2",
+    "typescript": "~6.0.3",
+    "typescript-eslint": "^8.61.1",
+    "vitest": "^4.0.8",
+    "vitest-axe": "^0.1.0"
   }
 }

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" role="img" aria-labelledby="title desc">
+  <title id="title">Cessaine General Manager Placeholder</title>
+  <desc id="desc">Placeholder portrait image for Cessaine, general manager.</desc>
+  <rect width="1200" height="800" fill="#111827" />
+  <circle cx="600" cy="330" r="170" fill="#f5d0fe" />
+  <rect x="430" y="500" width="340" height="180" rx="80" fill="#faf5ff" />
+  <text x="600" y="140" text-anchor="middle" fill="#f3f4f6" font-size="64" font-family="Segoe UI, sans-serif">Cessaine</text>
+  <text x="600" y="730" text-anchor="middle" fill="#e9d5ff" font-size="42" font-family="Segoe UI, sans-serif">General Manager Placeholder</text>
+</svg>

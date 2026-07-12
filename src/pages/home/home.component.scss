@@ -1,0 +1,14 @@
+:host {
+  display: block;
+  min-height: 100%;
+}
+
+section {
+  min-height: 100%;
+  padding: var(--spacing-lg);
+
+  h1 {
+    font-family: var(--font-family-heading);
+    color: var(--color-text);
+  }
+}

@@ -1,8 +1,89 @@
-@if (!isAgeGate) {
-    <app-header></app-header>
+<a class="skip-link" href="#main-content">Skip to main content</a>
+
+@if (isHeaderVisible()) {
+  <header class="app-header" [class.reduced-motion]="prefersReducedMotion()">
+    <a class="app-brand" routerLink="/" (click)="onMobileRouteSelected()" aria-label="Go to home">
+      <img ngSrc="favicon.ico" width="80" height="80" alt="Last Stop Brewing" priority />
+    </a>
+
+    <nav class="app-desktop-nav" aria-label="Primary navigation">
+      @for (link of headerLinks(); track link.route) {
+        <a
+          class="app-nav-link"
+          [routerLink]="link.route"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: link.exact }"
+        >
+          {{ link.label }}
+        </a>
+      }
+    </nav>
+
+    <button
+      class="app-mobile-toggle"
+      [id]="mobileMenuToggleId"
+      type="button"
+      [attr.aria-controls]="mobileMenuId"
+      [attr.aria-expanded]="isMenuOpen()"
+      aria-label="Toggle mobile menu"
+      (click)="toggleMobileMenu()"
+    >
+      <span class="app-mobile-toggle-icon" [class.is-open]="isMenuOpen()">
+        <img
+          class="menu-line last-stop-brewing-x-1"
+          ngSrc="LastStopBrewingX_1.png"
+          width="206"
+          height="50"
+          alt=""
+          aria-hidden="true"
+        />
+        <img
+          class="menu-line last-stop-brewing-x-2"
+          ngSrc="LastStopBrewingX_2.png"
+          width="195"
+          height="58"
+          alt=""
+          aria-hidden="true"
+        />
+        <img
+          class="menu-line last-stop-brewing-x-3"
+          ngSrc="LastStopBrewingX_1.png"
+          width="206"
+          height="50"
+          alt=""
+          aria-hidden="true"
+        />
+      </span>
+    </button>
+  </header>
+
+  @if (isMenuOpen() && !isDesktop()) {
+    <div
+      class="app-mobile-overlay"
+      [id]="mobileMenuId"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Mobile navigation menu"
+      (click)="onOverlayBackdropClick($event)"
+      (keydown)="onOverlayKeydown($event)"
+    >
+      <nav class="app-mobile-nav" aria-label="Mobile navigation">
+        @for (link of headerLinks(); track link.route) {
+          <a
+            class="app-mobile-nav-link"
+            [routerLink]="link.route"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: link.exact }"
+            (click)="onMobileRouteSelected()"
+          >
+            {{ link.label }}
+          </a>
+        }
+      </nav>
+    </div>
+  }
 }
 
-<div [class.header-margin]="!isAgeGate" >
-    <router-outlet #outlet="outlet"></router-outlet> 
-</div>
-
+<main id="main-content" [class.with-header]="isHeaderVisible()">
+  <router-outlet />
+</main>

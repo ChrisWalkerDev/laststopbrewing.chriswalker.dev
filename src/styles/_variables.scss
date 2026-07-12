@@ -1,0 +1,19 @@
+// SCSS design tokens — exposed as CSS custom properties on :root
+:root {
+  --color-bg: #ffffff;
+  --color-text: #1a1a1a;
+  --color-primary: #1a56db;
+  --color-primary-dark: #1e429f;
+  --spacing-base: 1rem;
+  --spacing-sm: 0.75rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --header-height: 5rem;
+  --color-border: #e5e7eb;
+  --header-z-index: 1400;
+  --header-overlay-z-index: 1300;
+  --header-motion-duration: 180ms;
+  --font-family-base: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-size-base: 1rem;
+  --line-height-base: 1.5;
+}

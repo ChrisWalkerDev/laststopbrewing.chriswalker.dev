@@ -1,0 +1,28 @@
+<section class="beer-page" aria-labelledby="beer-heading">
+  <h1 id="beer-heading" class="beer-page__sr-only">Beer</h1>
+
+  <div class="beer-page__frame-wrap">
+    <iframe
+      class="beer-page__frame"
+      [src]="embedSrc"
+      [title]="embedTitle"
+      loading="eager"
+      referrerpolicy="strict-origin-when-cross-origin"
+      (load)="onIframeLoad()"
+      (error)="onIframeError()"
+    ></iframe>
+  </div>
+
+  @if (showFallback()) {
+    <aside class="beer-page__fallback" aria-live="polite">
+      <p>{{ fallbackText }}</p>
+      <a
+        href="https://business.untappd.com/embeds/iframes/46552/172250"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        {{ fallbackLinkLabel }}
+      </a>
+    </aside>
+  }
+</section>

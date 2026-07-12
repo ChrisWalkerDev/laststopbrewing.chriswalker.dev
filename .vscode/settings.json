@@ -1,0 +1,24 @@
+{
+    "chat.promptFilesRecommendations": {
+    },
+    "chat.tools.terminal.autoApprove": {
+        ".specify/scripts/bash/": true,
+        ".specify/scripts/powershell/": true,
+        "git checkout": true,
+        "git switch": true,
+        "git remote": true,
+        ".\\.specify\\extensions\\git\\scripts\\powershell\\create-new-feature.ps1": true,
+        "git rev-parse": true,
+        "Add-Type": true,
+        "Resolve-Path": true,
+        "New-Item": true,
+        "Out-Null": true,
+        "Copy-Item": true,
+        ".\\.specify\\extensions\\git\\scripts\\powershell\\auto-commit.ps1": true,
+        "Rename-Item": true,
+        "git merge": true,
+        "git add": true,
+        "git commit": true
+    }
+}
+

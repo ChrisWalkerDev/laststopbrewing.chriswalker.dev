@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" role="img" aria-labelledby="title desc">
+  <title id="title">Hunter Owner Placeholder</title>
+  <desc id="desc">Placeholder portrait image for Hunter, owner.</desc>
+  <rect width="1200" height="800" fill="#3f6212" />
+  <circle cx="600" cy="330" r="170" fill="#fde68a" />
+  <rect x="430" y="500" width="340" height="180" rx="80" fill="#fef9c3" />
+  <text x="600" y="140" text-anchor="middle" fill="#fefce8" font-size="70" font-family="Segoe UI, sans-serif">Hunter</text>
+  <text x="600" y="730" text-anchor="middle" fill="#fef08a" font-size="42" font-family="Segoe UI, sans-serif">Owner Placeholder</text>
+</svg>
