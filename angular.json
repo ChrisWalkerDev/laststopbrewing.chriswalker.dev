@@ -9,7 +9,7 @@
   },
   "newProjectRoot": "projects",
   "projects": {
-    "angular-website": {
+    "laststopbrewing.chriswalker.dev": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -77,10 +77,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "angular-website:build:production"
+              "buildTarget": "laststopbrewing.chriswalker.dev:build:production"
             },
             "development": {
-              "buildTarget": "angular-website:build:development"
+              "buildTarget": "laststopbrewing.chriswalker.dev:build:development"
             }
           },
           "defaultConfiguration": "development"

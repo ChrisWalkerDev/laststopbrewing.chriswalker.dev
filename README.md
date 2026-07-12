@@ -37,7 +37,7 @@ npm start        # dev server at http://localhost:4200
 
 ```bash
 npm run build -- --configuration=production
-# Output: dist/angular-website/browser/
+# Output: dist/laststopbrewing.chriswalker.dev/browser/
 ```
 
 The production build uses `src/environments/environment.production.ts` via `fileReplacements` in `angular.json`. No source maps are emitted (`sourceMap: false`).
