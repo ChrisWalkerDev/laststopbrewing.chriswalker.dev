@@ -37,13 +37,15 @@
     <section class="location-page__map-panel" aria-labelledby="location-map-heading">
       <h2 id="location-map-heading" class="location-page__section-title">Map</h2>
       <div class="location-page__map-frame-wrap">
-        <iframe
-          class="location-page__map-frame"
-          [src]="mapEmbedSrc"
-          [title]="mapEmbedTitle"
-          loading="lazy"
-          referrerpolicy="no-referrer-when-downgrade"
-        ></iframe>
+        <a
+          class="location-page__map-link"
+          [href]="mapPageUrl"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Open Last Stop Brewing location in Google Maps"
+        >
+          <span class="location-page__map-link-text">Open in Google Maps</span>
+        </a>
       </div>
     </section>
   </div>

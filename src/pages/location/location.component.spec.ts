@@ -2,7 +2,6 @@ import { TestBed } from '@angular/core/testing';
 import {
   LOCATION_ADDRESS_LINES,
   LOCATION_HOURS,
-  LOCATION_MAP_EMBED_TITLE,
   LOCATION_MAP_PAGE_URL,
   LOCATION_PHONE_HREF,
   LOCATION_PHONE_NUMBER,
@@ -63,17 +62,18 @@ describe('LocationComponent', () => {
     expect(addressLines).toEqual([...LOCATION_ADDRESS_LINES]);
   });
 
-  it('should render an accessible map iframe', () => {
+  it('should render a clickable map link', () => {
     const fixture = TestBed.createComponent(LocationComponent);
     fixture.detectChanges();
 
-    const iframe = fixture.nativeElement.querySelector(
-      '.location-page__map-frame'
-    ) as HTMLIFrameElement | null;
+    const mapLink = fixture.nativeElement.querySelector(
+      '.location-page__map-link'
+    ) as HTMLAnchorElement | null;
 
-    expect(iframe).toBeTruthy();
-    expect(iframe?.getAttribute('title')).toBe(LOCATION_MAP_EMBED_TITLE);
-    expect(iframe?.getAttribute('src')).toContain('google.com/maps');
+    expect(mapLink).toBeTruthy();
+    expect(mapLink?.getAttribute('href')).toBe(LOCATION_MAP_PAGE_URL);
+    expect(mapLink?.getAttribute('target')).toBe('_blank');
+    expect(mapLink?.getAttribute('rel')).toContain('noopener');
   });
 
   it('should render clickable phone number with tel href', () => {
