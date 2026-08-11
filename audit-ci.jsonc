@@ -4,11 +4,9 @@
   "moderate": true,
   "skip-dev": false,
   "report-type": "important",
-  // Allowlisted CVEs are dev-only build tool transitive deps pinned by @angular/build.
-  // No fix exists in a stable Angular 22 release yet — revisit when 22.1.0 stable ships.
+  // The remaining advisory is a moderate transitive issue in the Angular CLI toolchain.
+  // The current Angular 22.1 stack no longer triggers the earlier allowlisted advisories.
   "allowlist": [
-    "GHSA-4x5r-pxfx-6jf8", // @babel/core arbitrary file read — via @angular/build & @angular/compiler-cli
-    "GHSA-x9g3-xrwr-cwfg", // piscina prototype pollution — via @angular/build
-    "GHSA-g7r4-m6w7-qqqr"  // esbuild arbitrary file read on Windows — via @angular/build
+    "GHSA-frvp-7c67-39w9"  // @hono/node-server path traversal via @angular/cli -> @modelcontextprotocol/sdk
   ]
 }
