@@ -3,6 +3,7 @@
   "compatibility_date": "2026-08-10",
 
   "assets": {
-    "directory": "./dist/laststopbrewing.chriswalker.dev/browser"
-  }
+    "directory": "./dist/laststopbrewing.chriswalker.dev/browser",
+    "not_found_handling": "single-page-application"
+  }  
 }
