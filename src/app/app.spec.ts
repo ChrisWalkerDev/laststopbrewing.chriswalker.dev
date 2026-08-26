@@ -164,6 +164,65 @@ describe('App', () => {
     expect(component.isMenuOpen()).toBeFalsy();
   });
 
+  it('should cycle focus through overlay controls with keyboard navigation', async () => {
+    const fixture = TestBed.createComponent(App);
+    const component = fixture.componentInstance;
+    component.isDesktop.set(false);
+
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const toggle = fixture.nativeElement.querySelector('.app-mobile-toggle') as HTMLButtonElement;
+    toggle.click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const overlay = fixture.nativeElement.querySelector('.app-mobile-overlay') as HTMLElement;
+    const links = Array.from(overlay.querySelectorAll('a[href]')) as HTMLAnchorElement[];
+    const firstLink = links[0];
+
+    firstLink.focus();
+    const tabForwardEvent = new KeyboardEvent('keydown', {
+      key: 'Tab',
+      bubbles: true,
+      cancelable: true,
+    });
+    overlay.dispatchEvent(tabForwardEvent);
+    fixture.detectChanges();
+
+    expect(document.activeElement).toBe(firstLink);
+  });
+
+  it('should close the mobile menu when the viewport becomes desktop-sized', async () => {
+    const fixture = TestBed.createComponent(App);
+    const component = fixture.componentInstance;
+    component.isDesktop.set(false);
+
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const toggle = fixture.nativeElement.querySelector('.app-mobile-toggle') as HTMLButtonElement;
+    Object.defineProperty(window, 'innerWidth', {
+      configurable: true,
+      writable: true,
+      value: 500,
+    });
+    toggle.click();
+    fixture.detectChanges();
+
+    expect(component.isMenuOpen()).toBeTruthy();
+
+    Object.defineProperty(window, 'innerWidth', {
+      configurable: true,
+      writable: true,
+      value: 1200,
+    });
+    window.dispatchEvent(new Event('resize'));
+    fixture.detectChanges();
+
+    expect(component.isMenuOpen()).toBeFalsy();
+  });
+
   it('should expose reduced-motion class when preference is enabled', async () => {
     const fixture = TestBed.createComponent(App);
     const component = fixture.componentInstance;
