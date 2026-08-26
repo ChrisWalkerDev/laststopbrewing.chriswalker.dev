@@ -1,3 +1,4 @@
+import { type Route } from '@angular/router';
 import { getOverlayFocusableElements, isHeaderVisible, normalizeAppPath } from './app-shell-policy';
 
 describe('app shell policy', () => {
@@ -6,9 +7,12 @@ describe('app shell policy', () => {
     expect(normalizeAppPath('?source=home')).toBe('/');
   });
 
-  it('should hide the header for excluded routes', () => {
-    expect(isHeaderVisible('/age-gate', ['/age-gate', '/access-denied'])).toBe(false);
-    expect(isHeaderVisible('/food', ['/age-gate', '/access-denied'])).toBe(true);
+  it('should hide the header for routes that opt out', () => {
+    const hiddenRoute: Route = { path: 'age-gate', data: { hideHeader: true } };
+    const visibleRoute: Route = { path: 'food' };
+
+    expect(isHeaderVisible('/age-gate', [hiddenRoute])).toBe(false);
+    expect(isHeaderVisible('/food', [hiddenRoute, visibleRoute])).toBe(true);
   });
 
   it('should return focusable elements from the overlay container', () => {

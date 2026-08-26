@@ -18,7 +18,12 @@ const ageGateInterceptor: CanActivateFn = (_route, state) => {
 };
 
 export const routes: Routes = [
-  { path: 'age-gate', component: AgeGateComponent, canActivate: [ageGateInterceptor] },
+  {
+    path: 'age-gate',
+    component: AgeGateComponent,
+    canActivate: [ageGateInterceptor],
+    data: { hideHeader: true },
+  },
   {
     path: 'food',
     loadComponent: () => import('../pages/food').then((module) => module.FoodComponent),
@@ -47,6 +52,7 @@ export const routes: Routes = [
         (module) => module.AccessDeniedComponent
       ),
     canActivate: [ageGateInterceptor],
+    data: { hideHeader: true },
   },
   { path: '', component: HomeComponent, pathMatch: 'full', canActivate: [ageGateInterceptor] },
   { path: '**', redirectTo: '' },

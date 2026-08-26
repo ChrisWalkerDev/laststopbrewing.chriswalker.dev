@@ -68,8 +68,7 @@ describe('App', () => {
     await fixture.whenStable();
 
     const component = fixture.componentInstance;
-    expect(component.excludedRoutes).toContain('/age-gate');
-    expect(component.excludedRoutes).toContain('/access-denied');
+    expect(component.isHeaderVisible()).toBe(true);
 
     const desktopLinks = Array.from(
       fixture.nativeElement.querySelectorAll('.app-desktop-nav a')

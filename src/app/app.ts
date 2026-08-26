@@ -13,7 +13,6 @@ import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } fro
 import { filter } from 'rxjs';
 import {
   DESKTOP_MIN_WIDTH,
-  EXCLUDED_HEADER_ROUTES,
   HEADER_OVERLAY_ID,
   HEADER_TOGGLE_ID,
   MOBILE_BREAKPOINT_PX,
@@ -21,6 +20,7 @@ import {
 } from './header.constants';
 import { HeaderNavLink } from './header-nav-link.model';
 import { environment } from '../environments/environment';
+import { routes as appRoutes } from './app.routes';
 import {
   getOverlayFocusableElements,
   getPrefersReducedMotionQuery,
@@ -40,7 +40,6 @@ export class App {
   readonly mobileBreakpoint = MOBILE_BREAKPOINT_PX;
   readonly mobileMenuId = HEADER_OVERLAY_ID;
   readonly mobileMenuToggleId = HEADER_TOGGLE_ID;
-  readonly excludedRoutes = EXCLUDED_HEADER_ROUTES;
 
   private previouslyFocusedElement: HTMLElement | null = null;
 
@@ -54,9 +53,7 @@ export class App {
   readonly currentPath = signal('/');
 
   readonly headerLinks = computed<HeaderNavLink[]>(() => PRIMARY_HEADER_LINKS);
-  readonly isHeaderVisible = computed(() =>
-    isHeaderVisible(this.currentPath(), this.excludedRoutes)
-  );
+  readonly isHeaderVisible = computed(() => isHeaderVisible(this.currentPath(), appRoutes));
 
   private readonly title = inject(Title);
   private readonly router = inject(Router);
