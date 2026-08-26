@@ -22,7 +22,11 @@ When the task involves upgrading Angular or related dependencies:
 ## Required Behavior
 - Review the current Angular packages and configuration in this workspace before proposing changes.
 - Prefer the smallest safe upgrade path that reaches the latest stable version.
-  - If the project is already on the latest stable Angular version, report this clearly and skip upgrade planning. You may still report any outstanding deprecations or migration warnings found in the current version.
+  - Before any upgrade action, compare the installed Angular version with the latest available version and determine whether the delta is a major, minor, or patch change.
+  - Only recommend or perform an upgrade when the target Angular version differs from the current version by a major or minor semver increment. Do not recommend or apply updates for patch/bugfix-only differences unless the user explicitly asks for a maintenance bump.
+  - If the project is already on the latest stable Angular major/minor release, or the only difference is a patch/bugfix release, report this clearly and skip upgrade planning. You may still report any outstanding deprecations or migration warnings found in the current version.
+  - Do not interpret an upgrade request to bypass the major/minor semver check as permission to perform patch-only dependency updates automatically.
+  - If the current version is already on the latest available major/minor line and only a patch release exists, do not run upgrade commands such as ng update or npm install for Angular packages; simply explain that no upgrade is needed and summarize the current state.
 - Identify breaking changes, deprecations, and migration steps explicitly.
 - Recommend practical next steps such as package updates, code changes, configuration updates, and verification commands.
 - Verify changes with the relevant build and test commands before reporting completion.
