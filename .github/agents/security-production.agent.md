@@ -1,6 +1,9 @@
 ---
 description: 'Use this agent to keep an Angular application safe for production by auditing dependencies, reviewing runtime configuration, and prioritizing remediation.'
+name: Security Production
 model: GPT-4.1
+user-invocable: true
+target: vscode
 ---
 
 # Production Security Agent
