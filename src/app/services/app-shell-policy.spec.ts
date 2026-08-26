@@ -16,7 +16,7 @@ describe('app shell policy', () => {
     const overlay = document.createElement('div');
     overlay.id = 'mobile-menu';
     overlay.innerHTML =
-      '<a href="#home">Home</a><button type="button">Open</button><div tabindex="-1"></div>';
+      '<a href="#home">Home</a><button type="button">Open</button><button disabled>Disabled</button><div style="display:none" tabindex="0"></div><div aria-hidden="true" tabindex="0"></div><div tabindex="-1"></div>';
     document.body.appendChild(overlay);
 
     const focusable = getOverlayFocusableElements(document, 'mobile-menu');

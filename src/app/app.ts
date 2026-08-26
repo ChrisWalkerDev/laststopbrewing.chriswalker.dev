@@ -42,6 +42,8 @@ export class App {
   readonly mobileMenuToggleId = HEADER_TOGGLE_ID;
   readonly excludedRoutes = EXCLUDED_HEADER_ROUTES;
 
+  private previouslyFocusedElement: HTMLElement | null = null;
+
   readonly isMenuOpen = signal(false);
   readonly isDesktop = signal(
     getViewportWidth(typeof window !== 'undefined' ? window : null) >= DESKTOP_MIN_WIDTH
@@ -97,11 +99,11 @@ export class App {
     this.isMenuOpen.set(false);
 
     if (source !== 'route' && source !== 'resize') {
-      this.restoreToggleFocus();
+      this.restoreFocus();
       return;
     }
 
-    queueMicrotask(() => this.restoreToggleFocus());
+    queueMicrotask(() => this.restoreFocus());
   }
 
   onOverlayBackdropClick(event: MouseEvent): void {
@@ -133,6 +135,8 @@ export class App {
   }
 
   private openMobileMenu(): void {
+    this.previouslyFocusedElement =
+      this.document.activeElement instanceof HTMLElement ? this.document.activeElement : null;
     this.isMenuOpen.set(true);
 
     queueMicrotask(() => this.focusFirstOverlayElement());
@@ -227,9 +231,14 @@ export class App {
     focusableElements[0].focus();
   }
 
-  private restoreToggleFocus(): void {
-    const toggle = this.document.getElementById(this.mobileMenuToggleId) as HTMLElement | null;
-    toggle?.focus();
+  private restoreFocus(): void {
+    const fallbackToggle = this.document.getElementById(
+      this.mobileMenuToggleId
+    ) as HTMLElement | null;
+    const target = this.previouslyFocusedElement ?? fallbackToggle;
+
+    target?.focus();
+    this.previouslyFocusedElement = null;
   }
 
   private getOverlayFocusableElements(): HTMLElement[] {

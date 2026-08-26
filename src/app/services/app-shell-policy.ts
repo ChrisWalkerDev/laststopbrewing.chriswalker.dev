@@ -26,7 +26,15 @@ export function getOverlayFocusableElements(document: Document, overlayId: strin
     'textarea:not([disabled])',
   ].join(', ');
 
-  return Array.from(overlay.querySelectorAll<HTMLElement>(selector));
+  return Array.from(overlay.querySelectorAll<HTMLElement>(selector)).filter((element) => {
+    const style = window.getComputedStyle(element);
+    return (
+      style.display !== 'none' &&
+      style.visibility !== 'hidden' &&
+      !element.hasAttribute('disabled') &&
+      !element.getAttribute('aria-hidden')
+    );
+  });
 }
 
 export function getViewportWidth(windowRef: Window | null): number {
