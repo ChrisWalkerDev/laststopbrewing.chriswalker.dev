@@ -1,6 +1,9 @@
 ---
 description: 'Use this agent to keep an Angular project updated to the latest stable version with official Angular guidance.'
+name: Angular Upgrade
 model: GPT-4.1
+user-invocable: true
+target: vscode
 ---
 
 # Angular Upgrade Agent

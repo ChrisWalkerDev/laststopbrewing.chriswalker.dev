@@ -3,10 +3,5 @@
   // Fail on moderate, high, and critical CVEs. Low and info are informational only.
   "moderate": true,
   "skip-dev": false,
-  "report-type": "important",
-  // The remaining advisory is a moderate transitive issue in the Angular CLI toolchain.
-  // The current Angular 22.1 stack no longer triggers the earlier allowlisted advisories.
-  "allowlist": [
-    "GHSA-frvp-7c67-39w9"  // @hono/node-server path traversal via @angular/cli -> @modelcontextprotocol/sdk
-  ]
+  "report-type": "important"
 }
