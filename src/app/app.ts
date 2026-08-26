@@ -21,6 +21,13 @@ import {
 } from './header.constants';
 import { HeaderNavLink } from './header-nav-link.model';
 import { environment } from '../environments/environment';
+import {
+  getOverlayFocusableElements,
+  getPrefersReducedMotionQuery,
+  getViewportWidth,
+  isHeaderVisible,
+  normalizeAppPath,
+} from './services/app-shell-policy';
 
 @Component({
   selector: 'app-root',
@@ -36,13 +43,17 @@ export class App {
   readonly excludedRoutes = EXCLUDED_HEADER_ROUTES;
 
   readonly isMenuOpen = signal(false);
-  readonly isDesktop = signal(this.getViewportWidth() >= DESKTOP_MIN_WIDTH);
-  readonly prefersReducedMotion = signal(this.prefersReducedMotionQuery());
+  readonly isDesktop = signal(
+    getViewportWidth(typeof window !== 'undefined' ? window : null) >= DESKTOP_MIN_WIDTH
+  );
+  readonly prefersReducedMotion = signal(
+    getPrefersReducedMotionQuery(typeof window !== 'undefined' ? window : null)
+  );
   readonly currentPath = signal('/');
 
   readonly headerLinks = computed<HeaderNavLink[]>(() => PRIMARY_HEADER_LINKS);
-  readonly isHeaderVisible = computed(
-    () => !this.excludedRoutes.includes(this.currentPath() as (typeof this.excludedRoutes)[number])
+  readonly isHeaderVisible = computed(() =>
+    isHeaderVisible(this.currentPath(), this.excludedRoutes)
   );
 
   private readonly title = inject(Title);
@@ -55,7 +66,7 @@ export class App {
 
   constructor() {
     this.title.setTitle(environment.appTitle);
-    this.currentPath.set(this.normalizePath(this.router.url));
+    this.currentPath.set(normalizeAppPath(this.router.url));
     this.initializeViewportListener();
     this.initializeReducedMotionListener();
     this.initializeRouteCloseListener();
@@ -133,7 +144,8 @@ export class App {
     }
 
     const onResize = () => {
-      const desktop = this.getViewportWidth() >= DESKTOP_MIN_WIDTH;
+      const desktop =
+        getViewportWidth(typeof window !== 'undefined' ? window : null) >= DESKTOP_MIN_WIDTH;
       const wasDesktop = this.isDesktop();
 
       this.isDesktop.set(desktop);
@@ -172,19 +184,12 @@ export class App {
         takeUntilDestroyed(this.destroyRef)
       )
       .subscribe(() => {
-        this.currentPath.set(this.normalizePath(this.router.url));
+        this.currentPath.set(normalizeAppPath(this.router.url));
 
         if (this.isMenuOpen()) {
           this.closeMobileMenu('route');
         }
       });
-  }
-
-  private normalizePath(url: string): string {
-    const withoutQuery = url.split('?')[0] ?? '/';
-    const withoutFragment = withoutQuery.split('#')[0] ?? '/';
-
-    return withoutFragment.length === 0 ? '/' : withoutFragment;
   }
 
   private trapOverlayFocus(event: KeyboardEvent): void {
@@ -228,36 +233,6 @@ export class App {
   }
 
   private getOverlayFocusableElements(): HTMLElement[] {
-    const overlay = this.document.getElementById(this.mobileMenuId);
-    if (!overlay) {
-      return [];
-    }
-
-    const selector = [
-      'a[href]',
-      'button:not([disabled])',
-      '[tabindex]:not([tabindex="-1"])',
-      'input:not([disabled])',
-      'select:not([disabled])',
-      'textarea:not([disabled])',
-    ].join(', ');
-
-    return Array.from(overlay.querySelectorAll<HTMLElement>(selector));
-  }
-
-  private getViewportWidth(): number {
-    if (typeof window === 'undefined') {
-      return DESKTOP_MIN_WIDTH;
-    }
-
-    return window.innerWidth;
-  }
-
-  private prefersReducedMotionQuery(): boolean {
-    if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
-      return false;
-    }
-
-    return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    return getOverlayFocusableElements(this.document, this.mobileMenuId);
   }
 }
