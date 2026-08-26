@@ -18,7 +18,10 @@
         "Rename-Item": true,
         "git merge": true,
         "git add": true,
-        "git commit": true
+        "git commit": true,
+        "npx prettier": true,
+        "npx eslint": true,
+        "npx ng": true
     }
 }
 

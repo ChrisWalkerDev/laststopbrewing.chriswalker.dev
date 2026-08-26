@@ -3,6 +3,7 @@ import { CanActivateFn, Router, Routes } from '@angular/router';
 import { AgeGateComponent } from '../pages/age-gate/age-gate.component';
 import { HomeComponent } from '../pages/home/home.component';
 import { AgeGateRoutingService } from './services/age-gate-routing.service';
+import { AGE_GATE_ROUTE } from './services/age-gate.types';
 
 const ageGateInterceptor: CanActivateFn = (_route, state) => {
   const router = inject(Router);
@@ -13,7 +14,7 @@ const ageGateInterceptor: CanActivateFn = (_route, state) => {
     return true;
   }
 
-  return router.parseUrl(decision.redirectTo ?? '/age-gate');
+  return router.parseUrl(decision.redirectTo ?? AGE_GATE_ROUTE);
 };
 
 export const routes: Routes = [
