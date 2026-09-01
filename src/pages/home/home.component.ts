@@ -1,7 +1,14 @@
 import { NgOptimizedImage } from '@angular/common';
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 
-type HomeSectionDay = 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday';
+type HomeSectionDay =
+  | 'monday'
+  | 'tuesday'
+  | 'wednesday'
+  | 'thursday'
+  | 'friday'
+  | 'saturday'
+  | 'sunday';
 
 type HomeSectionOrderConfig = Partial<Record<HomeSectionDay, string[]>>;
 
@@ -96,8 +103,10 @@ export class HomeComponent {
       const rightIndex = configuredOrder.indexOf(right.id);
 
       if (leftIndex !== rightIndex) {
-        return (leftIndex === -1 ? Number.MAX_SAFE_INTEGER : leftIndex) -
-          (rightIndex === -1 ? Number.MAX_SAFE_INTEGER : rightIndex);
+        return (
+          (leftIndex === -1 ? Number.MAX_SAFE_INTEGER : leftIndex) -
+          (rightIndex === -1 ? Number.MAX_SAFE_INTEGER : rightIndex)
+        );
       }
 
       const leftOriginalIndex = this.sections().findIndex((section) => section.id === left.id);

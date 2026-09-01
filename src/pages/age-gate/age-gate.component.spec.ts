@@ -64,7 +64,9 @@ describe('AgeGateComponent', () => {
     session.persistRequestedDestination('/food');
     fixture.detectChanges();
 
-    const buttons = fixture.nativeElement.querySelectorAll('button') as NodeListOf<HTMLButtonElement>;
+    const buttons = fixture.nativeElement.querySelectorAll(
+      'button'
+    ) as NodeListOf<HTMLButtonElement>;
     buttons[0].click();
 
     expect(session.getDecision()).toBe('approved');
