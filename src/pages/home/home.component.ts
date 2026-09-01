@@ -49,18 +49,18 @@ export class HomeComponent {
     },
     {
       id: 'beer',
-      title: 'Last new beer on tap.',
-      subtitle: 'Fresh pours arrive every Monday for a new week of flavor.',
-      description:
-        'Stop by for the newest release, seasonal favorites, and the first pour of the week.',
-      ctaLabel: 'See the latest pour',
+      title: 'The latest beer to be tapped.',
+      subtitle: 'Fresh pours every day.',
+      description: 'Stop by for the newest release today!',
+      ctaLabel: 'See our current tap list',
       ctaHref: '/beer',
-      imageSrc: 'assets/home/new_beer_20260831.jpg',
-      imageAlt: 'A hazy pale ale poured into a stemmed glass on a barrel top inside the brewhouse.',
-      imageWidth: 2216,
-      imageHeight: 1663,
-      imageCaptionTitle: 'Last Call Haze',
-      imageCaptionSubtitle: 'New England IPA',
+      imageSrc: 'assets/home/juice_hunter_20260831.jpg',
+      imageAlt:
+        'A beer glass filled with a hazy orange beer on a bar counter with a blurred background of the taproom.',
+      imageWidth: 1212,
+      imageHeight: 2048,
+      imageCaptionTitle: 'Juice Hunter',
+      imageCaptionSubtitle: 'Juicy Double IPA',
     },
     {
       id: 'food',
@@ -70,6 +70,12 @@ export class HomeComponent {
         'Enjoy elevated pub classics, shareable plates, and crowd-pleasing favorites made to pair.',
       ctaLabel: 'Browse the menu',
       ctaHref: '/food',
+      imageSrc: 'assets/home/burger_20260831.jpg',
+      imageAlt: 'A burger served with seasoned french fries in a basket on a wooden taproom table.',
+      imageWidth: 1512,
+      imageHeight: 1546,
+      imageCaptionTitle: 'Pub Classics',
+      imageCaptionSubtitle: 'Hand-crafted burgers and sides',
     },
     {
       id: 'live-music',
@@ -83,10 +89,13 @@ export class HomeComponent {
   ]);
 
   protected readonly sectionOrderByDay = signal<HomeSectionOrderConfig>({
-    monday: ['beer', 'taproom', 'food', 'live-music'],
-    thursday: ['live-music', 'taproom', 'food', 'beer'],
-    friday: ['live-music', 'taproom', 'food', 'beer'],
-    saturday: ['live-music', 'taproom', 'food', 'beer'],
+    sunday: ['beer', 'food', 'live-music', 'taproom'],
+    monday: ['beer', 'food', 'live-music', 'taproom'],
+    tuesday: ['beer', 'food', 'live-music', 'taproom'],
+    wednesday: ['beer', 'food', 'live-music', 'taproom'],
+    thursday: ['live-music', 'beer', 'food', 'taproom'],
+    friday: ['live-music', 'beer', 'food', 'taproom'],
+    saturday: ['live-music', 'beer', 'food', 'taproom'],
   });
 
   protected getVisibleSections(date: Date = new Date()): HomeSection[] {
@@ -98,21 +107,8 @@ export class HomeComponent {
 
     const configuredOrder = this.sectionOrderByDay()[dayName] ?? [];
 
-    return [...this.sections()].sort((left, right) => {
-      const leftIndex = configuredOrder.indexOf(left.id);
-      const rightIndex = configuredOrder.indexOf(right.id);
-
-      if (leftIndex !== rightIndex) {
-        return (
-          (leftIndex === -1 ? Number.MAX_SAFE_INTEGER : leftIndex) -
-          (rightIndex === -1 ? Number.MAX_SAFE_INTEGER : rightIndex)
-        );
-      }
-
-      const leftOriginalIndex = this.sections().findIndex((section) => section.id === left.id);
-      const rightOriginalIndex = this.sections().findIndex((section) => section.id === right.id);
-
-      return leftOriginalIndex - rightOriginalIndex;
-    });
+    return this.sections()
+      .filter((section) => configuredOrder.includes(section.id))
+      .sort((left, right) => configuredOrder.indexOf(left.id) - configuredOrder.indexOf(right.id));
   }
 }

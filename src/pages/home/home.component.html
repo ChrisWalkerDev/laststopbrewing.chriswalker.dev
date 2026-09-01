@@ -19,41 +19,46 @@
     @for (section of getVisibleSections(); track section.id) {
       <section
         class="home-page__section"
+        [class.home-page__section--with-media]="section.imageSrc"
         [attr.aria-labelledby]="'home-section-title-' + section.id"
         role="group"
       >
-        <div class="home-page__section-content">
-          <p class="home-page__eyebrow">{{ section.subtitle }}</p>
-          <h2 [id]="'home-section-title-' + section.id">{{ section.title }}</h2>
-          <p>{{ section.description }}</p>
-          <a class="home-page__link home-page__link--secondary" [href]="section.ctaHref">{{
-            section.ctaLabel
-          }}</a>
-        </div>
-
-        @if (section.imageSrc) {
-          <figure class="home-page__media">
-            @if (section.imageCaptionTitle) {
-              <figcaption class="home-page__media-caption">
-                <span class="home-page__media-caption-title">{{ section.imageCaptionTitle }}</span>
-                @if (section.imageCaptionSubtitle) {
-                  <span class="home-page__media-caption-subtitle">{{
-                    section.imageCaptionSubtitle
+        <div class="home-page__section-inner">
+          @if (section.imageSrc) {
+            <figure class="home-page__media">
+              @if (section.imageCaptionTitle) {
+                <figcaption class="home-page__media-caption">
+                  <span class="home-page__media-caption-title">{{
+                    section.imageCaptionTitle
                   }}</span>
-                }
-              </figcaption>
-            }
-            <img
-              class="home-page__image"
-              [ngSrc]="section.imageSrc"
-              [alt]="section.imageAlt ?? ''"
-              [width]="section.imageWidth"
-              [height]="section.imageHeight"
-              loading="lazy"
-              decoding="async"
-            />
-          </figure>
-        }
+                  @if (section.imageCaptionSubtitle) {
+                    <span class="home-page__media-caption-subtitle">{{
+                      section.imageCaptionSubtitle
+                    }}</span>
+                  }
+                </figcaption>
+              }
+              <img
+                class="home-page__image"
+                [ngSrc]="section.imageSrc"
+                [alt]="section.imageAlt ?? ''"
+                [width]="section.imageWidth"
+                [height]="section.imageHeight"
+                loading="lazy"
+                decoding="async"
+              />
+            </figure>
+          }
+
+          <div class="home-page__section-content">
+            <p class="home-page__eyebrow">{{ section.subtitle }}</p>
+            <h2 [id]="'home-section-title-' + section.id">{{ section.title }}</h2>
+            <p>{{ section.description }}</p>
+            <a class="home-page__link home-page__link--secondary" [href]="section.ctaHref">{{
+              section.ctaLabel
+            }}</a>
+          </div>
+        </div>
       </section>
     }
   </div>

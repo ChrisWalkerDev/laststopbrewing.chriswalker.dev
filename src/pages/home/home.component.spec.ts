@@ -30,6 +30,29 @@ describe('HomeComponent', () => {
     expect(compiled.querySelectorAll('a').length).toBeGreaterThanOrEqual(2);
   });
 
+  it('should use the beer asset dimensions for its image metadata', () => {
+    const fixture = TestBed.createComponent(HomeComponent);
+    const component = fixture.componentInstance;
+    const beerSection = component['sections']().find((section) => section.id === 'beer');
+
+    expect(beerSection).toMatchObject({
+      imageWidth: 1212,
+      imageHeight: 2048,
+    });
+  });
+
+  it('should use the burger asset dimensions for the food section image metadata', () => {
+    const fixture = TestBed.createComponent(HomeComponent);
+    const component = fixture.componentInstance;
+    const foodSection = component['sections']().find((section) => section.id === 'food');
+
+    expect(foodSection).toMatchObject({
+      imageSrc: 'assets/home/burger_20260831.jpg',
+      imageWidth: 1512,
+      imageHeight: 1546,
+    });
+  });
+
   it('should render a decorative scroll cue below the hero', () => {
     const fixture = TestBed.createComponent(HomeComponent);
     fixture.detectChanges();
@@ -61,6 +84,82 @@ describe('HomeComponent', () => {
       .join('\n');
 
     expect(stylesText).toContain('min-height: calc(100dvh - var(--header-height))');
+  });
+
+  it('should contain section media within the available viewport height', () => {
+    const fixture = TestBed.createComponent(HomeComponent);
+    fixture.detectChanges();
+
+    const stylesText = Array.from(document.querySelectorAll('style'))
+      .map((styleTag) => styleTag.textContent ?? '')
+      .join('\n')
+      .replace(/\s+/g, '');
+
+    expect(stylesText).toContain('object-fit:contain');
+  });
+
+  it('should round and fade the bottom edges of section media into its background without rounding the top', () => {
+    const fixture = TestBed.createComponent(HomeComponent);
+    fixture.detectChanges();
+
+    const stylesText = Array.from(document.querySelectorAll('style'))
+      .map((styleTag) => styleTag.textContent ?? '')
+      .join('\n')
+      .replace(/\s+/g, '');
+
+    expect(stylesText).toContain('border-radius:001.5rem1.5rem');
+    expect(stylesText).toContain('mask-image:radial-gradient');
+  });
+
+  it('should give the media caption enough contrast against the section background and style its bottom border', () => {
+    const fixture = TestBed.createComponent(HomeComponent);
+    fixture.detectChanges();
+
+    const stylesText = Array.from(document.querySelectorAll('style'))
+      .map((styleTag) => styleTag.textContent ?? '')
+      .join('\n')
+      .replace(/\s+/g, '');
+
+    expect(stylesText).toContain('background-color:rgba(17,17,17,0.92)');
+    expect(stylesText).toContain('box-shadow:00.5rem1.5remrgba(0,0,0,0.35)');
+    expect(stylesText).toContain('border-bottom:3pxsolidvar(--color-primary-dark)');
+    expect(stylesText).toContain('border-bottom-color:#fff');
+  });
+
+  it('should size the media caption to the image frame', () => {
+    const fixture = TestBed.createComponent(HomeComponent);
+    fixture.detectChanges();
+
+    const stylesText = Array.from(document.querySelectorAll('style'))
+      .map((styleTag) => styleTag.textContent ?? '')
+      .join('\n')
+      .replace(/\s+/g, '');
+
+    expect(stylesText).toContain('width:fit-content');
+    expect(stylesText).toContain('align-self:stretch');
+  });
+
+  it('should keep section media background transparent', () => {
+    const fixture = TestBed.createComponent(HomeComponent);
+    fixture.detectChanges();
+
+    const stylesText = Array.from(document.querySelectorAll('style'))
+      .map((styleTag) => styleTag.textContent ?? '')
+      .join('\n');
+
+    expect(stylesText).toContain('background-color: transparent');
+  });
+
+  it('should place image markup before section text for mobile-first flow', () => {
+    const fixture = TestBed.createComponent(HomeComponent);
+    fixture.detectChanges();
+
+    const beerSection = fixture.nativeElement.querySelector(
+      '[aria-labelledby="home-section-title-beer"]'
+    ) as HTMLElement;
+    const sectionInner = beerSection.querySelector('.home-page__section-inner') as HTMLElement;
+
+    expect(sectionInner.firstElementChild?.className).toContain('home-page__media');
   });
 
   it('should start the first post-hero gradient dark at the bottom left', () => {
@@ -110,6 +209,48 @@ describe('HomeComponent', () => {
 
     expect(component['sectionOrderByDay']().monday).toEqual(['section1', 'section2']);
     expect(component['sectionOrderByDay']().tuesday).toEqual(['section2', 'section1']);
+  });
+
+  it('should exclude sections that are not included in the configured section order for the day', () => {
+    const fixture = TestBed.createComponent(HomeComponent);
+    const component = fixture.componentInstance;
+
+    component['sectionOrderByDay'].set({
+      monday: ['beer', 'taproom'],
+    });
+
+    const mondaySections = component['getVisibleSections'](new Date('2026-08-31T12:00:00'));
+
+    expect(mondaySections.map((section) => section.id)).toEqual(['beer', 'taproom']);
+    expect(mondaySections.some((section) => section.id === 'food')).toBe(false);
+    expect(mondaySections.some((section) => section.id === 'live-music')).toBe(false);
+  });
+
+  it('should not render omitted sections in the template when they are excluded from the section order', async () => {
+    const fixture = TestBed.createComponent(HomeComponent);
+    const component = fixture.componentInstance;
+
+    component['sectionOrderByDay'].set({
+      monday: ['beer'],
+      tuesday: ['beer'],
+      wednesday: ['beer'],
+      thursday: ['beer'],
+      friday: ['beer'],
+      saturday: ['beer'],
+      sunday: ['beer'],
+    });
+
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const sections = fixture.nativeElement.querySelectorAll('section.home-page__section');
+    expect(sections).toHaveLength(1);
+    expect(
+      fixture.nativeElement.querySelector('[aria-labelledby="home-section-title-beer"]')
+    ).not.toBeNull();
+    expect(
+      fixture.nativeElement.querySelector('[aria-labelledby="home-section-title-food"]')
+    ).toBeNull();
   });
 
   it('should have no axe accessibility violations (WCAG 2.1 AA)', async () => {
