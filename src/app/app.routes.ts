@@ -46,6 +46,11 @@ export const routes: Routes = [
     canActivate: [ageGateInterceptor],
   },
   {
+    path: 'contact',
+    loadComponent: () => import('../pages/contact').then((module) => module.ContactComponent),
+    canActivate: [ageGateInterceptor],
+  },
+  {
     path: 'access-denied',
     loadComponent: () =>
       import('../pages/access-denied/access-denied.component').then(

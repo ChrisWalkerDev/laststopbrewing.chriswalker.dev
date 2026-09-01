@@ -1,0 +1,83 @@
+<section class="contact-page" aria-labelledby="contact-heading">
+  <div class="contact-page__layout">
+    <article class="contact-page__intro-panel" aria-labelledby="contact-heading">
+      <h1 id="contact-heading" class="contact-page__title">Contact Us</h1>
+      <p class="contact-page__description">Thank you for visiting the Last Stop Brewing Website!</p>
+      <p class="contact-page__description">
+        If you have any questions please use this page to send us a message or call
+        <a class="contact-page__phone-link" href="tel:+15024370024">502-437-0024</a> to speak to one
+        of our team members.
+      </p>
+    </article>
+
+    <section class="contact-page__form-panel" aria-labelledby="contact-form-heading">
+      <h2 id="contact-form-heading" class="contact-page__form-title">Send a Message</h2>
+
+      @if (submitted()) {
+        <p class="contact-page__confirmation" role="status">
+          Thanks for reaching out. Your message has been received.
+        </p>
+      }
+
+      <form class="contact-page__form" [formGroup]="contactForm" (ngSubmit)="submit()" novalidate>
+        <div class="contact-page__field">
+          <label for="contact-first-name">First Name <span aria-hidden="true">*</span></label>
+          <input
+            id="contact-first-name"
+            type="text"
+            formControlName="firstName"
+            autocomplete="given-name"
+            required
+          />
+          @if (contactForm.controls.firstName.touched && contactForm.controls.firstName.invalid) {
+            <p class="contact-page__error">Enter your first name.</p>
+          }
+        </div>
+
+        <div class="contact-page__field">
+          <label for="contact-last-name">Last Name <span aria-hidden="true">*</span></label>
+          <input
+            id="contact-last-name"
+            type="text"
+            formControlName="lastName"
+            autocomplete="family-name"
+            required
+          />
+          @if (contactForm.controls.lastName.touched && contactForm.controls.lastName.invalid) {
+            <p class="contact-page__error">Enter your last name.</p>
+          }
+        </div>
+
+        <div class="contact-page__field">
+          <label for="contact-email">Email <span aria-hidden="true">*</span></label>
+          <input
+            id="contact-email"
+            type="email"
+            formControlName="email"
+            autocomplete="email"
+            required
+          />
+          @if (contactForm.controls.email.touched && contactForm.controls.email.invalid) {
+            <p class="contact-page__error">Enter a valid email address.</p>
+          }
+        </div>
+
+        <div class="contact-page__field">
+          <label for="contact-phone">Phone</label>
+          <input id="contact-phone" type="tel" formControlName="phone" autocomplete="tel" />
+        </div>
+
+        <div class="contact-page__field contact-page__field--message">
+          <label for="contact-message">Message <span aria-hidden="true">*</span></label>
+          <textarea id="contact-message" formControlName="message" required></textarea>
+          @if (contactForm.controls.message.touched && contactForm.controls.message.invalid) {
+            <p class="contact-page__error">Enter a message.</p>
+          }
+        </div>
+
+        <p class="contact-page__required-note"><span aria-hidden="true">*</span> Required field</p>
+        <button class="contact-page__submit" type="submit">Send Message</button>
+      </form>
+    </section>
+  </div>
+</section>

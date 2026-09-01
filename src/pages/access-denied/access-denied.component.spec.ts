@@ -42,6 +42,23 @@ describe('AccessDeniedComponent', () => {
     expect(navigateSpy).toHaveBeenCalledWith('/?from=denied');
   });
 
+  it('should approve a visitor on their twenty-first birthday', () => {
+    const fixture = TestBed.createComponent(AccessDeniedComponent);
+    const router = TestBed.inject(Router);
+    const session = TestBed.inject(AgeGateSessionService);
+    const navigateSpy = vi.spyOn(router, 'navigateByUrl').mockResolvedValue(true);
+    const today = new Date();
+    const dobIso = `${today.getFullYear() - 21}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(
+      today.getDate()
+    ).padStart(2, '0')}`;
+
+    fixture.componentInstance['dobControl'].setValue(dobIso);
+    fixture.componentInstance['verifyDateOfBirth']();
+
+    expect(session.getDecision()).toBe('approved');
+    expect(navigateSpy).toHaveBeenCalledWith('/');
+  });
+
   it('should keep denied decision when DOB is under 21', () => {
     const fixture = TestBed.createComponent(AccessDeniedComponent);
     const session = TestBed.inject(AgeGateSessionService);
@@ -65,6 +82,22 @@ describe('AccessDeniedComponent', () => {
     fixture.componentInstance['verifyDateOfBirth']();
 
     expect(session.getDecision()).toBe('denied');
+    expect(fixture.componentInstance['statusMessage']()).toContain(
+      'Please enter a valid date of birth that is not in the future.'
+    );
+  });
+
+  it('should reject impossible calendar dates instead of normalizing them', () => {
+    const fixture = TestBed.createComponent(AccessDeniedComponent);
+    const router = TestBed.inject(Router);
+    const session = TestBed.inject(AgeGateSessionService);
+    const navigateSpy = vi.spyOn(router, 'navigateByUrl').mockResolvedValue(true);
+
+    fixture.componentInstance['dobControl'].setValue('2000-02-30');
+    fixture.componentInstance['verifyDateOfBirth']();
+
+    expect(session.getDecision()).toBe('denied');
+    expect(navigateSpy).not.toHaveBeenCalled();
     expect(fixture.componentInstance['statusMessage']()).toContain(
       'Please enter a valid date of birth that is not in the future.'
     );

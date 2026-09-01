@@ -74,12 +74,13 @@ describe('App', () => {
       fixture.nativeElement.querySelectorAll('.app-desktop-nav a')
     ) as HTMLAnchorElement[];
 
-    expect(desktopLinks.length).toBe(5);
+    expect(desktopLinks.length).toBe(6);
     expect(desktopLinks[0].textContent?.trim()).toBe('Home');
     expect(desktopLinks[1].textContent?.trim()).toBe('Food');
     expect(desktopLinks[2].textContent?.trim()).toBe('Beer');
     expect(desktopLinks[3].textContent?.trim()).toBe('Location');
-    expect(desktopLinks[4].textContent?.trim()).toBe('About');
+    expect(desktopLinks[4].textContent?.trim()).toBe('Contact');
+    expect(desktopLinks[5].textContent?.trim()).toBe('About');
   });
 
   it('should hide header on age-gate and access-denied routes', async () => {
@@ -164,7 +165,7 @@ describe('App', () => {
     expect(component.isMenuOpen()).toBeFalsy();
   });
 
-  it('should cycle focus through overlay controls with keyboard navigation', async () => {
+  it('should wrap focus through overlay controls with keyboard navigation', async () => {
     const fixture = TestBed.createComponent(App);
     const component = fixture.componentInstance;
     component.isDesktop.set(false);
@@ -180,8 +181,9 @@ describe('App', () => {
     const overlay = fixture.nativeElement.querySelector('.app-mobile-overlay') as HTMLElement;
     const links = Array.from(overlay.querySelectorAll('a[href]')) as HTMLAnchorElement[];
     const firstLink = links[0];
+    const lastLink = links[links.length - 1];
 
-    firstLink.focus();
+    lastLink.focus();
     const tabForwardEvent = new KeyboardEvent('keydown', {
       key: 'Tab',
       bubbles: true,
@@ -191,6 +193,18 @@ describe('App', () => {
     fixture.detectChanges();
 
     expect(document.activeElement).toBe(firstLink);
+
+    firstLink.focus();
+    const tabBackwardEvent = new KeyboardEvent('keydown', {
+      key: 'Tab',
+      shiftKey: true,
+      bubbles: true,
+      cancelable: true,
+    });
+    overlay.dispatchEvent(tabBackwardEvent);
+    fixture.detectChanges();
+
+    expect(document.activeElement).toBe(lastLink);
   });
 
   it('should close the mobile menu when the viewport becomes desktop-sized', async () => {

@@ -1,3 +1,60 @@
-<section aria-labelledby="home-heading">
-  <h1 id="home-heading">{{ pageTitle() }}</h1>
-</section>
+<div class="home-page" aria-labelledby="home-heading">
+  <div class="home-page__hero home-page__section" role="group" aria-labelledby="home-heading">
+    <div class="home-page__hero-content">
+      <p class="home-page__eyebrow">Neighborhood brewery • open daily</p>
+      <h1 id="home-heading">{{ pageTitle() }}</h1>
+      <p class="home-page__intro">
+        A welcoming taproom where good beer, great food, and easygoing conversation meet at the end
+        of the road.
+      </p>
+      <div class="home-page__actions">
+        <a class="home-page__link home-page__link--primary" href="/location">Find us</a>
+        <a class="home-page__link home-page__link--secondary" href="/beer">Explore our pours</a>
+      </div>
+    </div>
+    <span class="home-page__scroll-cue" aria-hidden="true"></span>
+  </div>
+
+  <div class="home-page__sections" aria-label="Brewery highlights">
+    @for (section of getVisibleSections(); track section.id) {
+      <section
+        class="home-page__section"
+        [attr.aria-labelledby]="'home-section-title-' + section.id"
+        role="group"
+      >
+        <div class="home-page__section-content">
+          <p class="home-page__eyebrow">{{ section.subtitle }}</p>
+          <h2 [id]="'home-section-title-' + section.id">{{ section.title }}</h2>
+          <p>{{ section.description }}</p>
+          <a class="home-page__link home-page__link--secondary" [href]="section.ctaHref">{{
+            section.ctaLabel
+          }}</a>
+        </div>
+
+        @if (section.imageSrc) {
+          <figure class="home-page__media">
+            @if (section.imageCaptionTitle) {
+              <figcaption class="home-page__media-caption">
+                <span class="home-page__media-caption-title">{{ section.imageCaptionTitle }}</span>
+                @if (section.imageCaptionSubtitle) {
+                  <span class="home-page__media-caption-subtitle">{{
+                    section.imageCaptionSubtitle
+                  }}</span>
+                }
+              </figcaption>
+            }
+            <img
+              class="home-page__image"
+              [ngSrc]="section.imageSrc"
+              [alt]="section.imageAlt ?? ''"
+              [width]="section.imageWidth"
+              [height]="section.imageHeight"
+              loading="lazy"
+              decoding="async"
+            />
+          </figure>
+        }
+      </section>
+    }
+  </div>
+</div>

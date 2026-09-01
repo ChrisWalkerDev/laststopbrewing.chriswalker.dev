@@ -24,10 +24,18 @@
   overflow: hidden;
   background-color: var(--color-bg);
   border-bottom: 1px solid var(--color-border);
+}
 
-  &:nth-child(even) {
-    background-color: color-mix(in srgb, var(--color-bg) 92%, var(--color-primary) 8%);
-  }
+.about-page__sections > .about-page__section:nth-child(even) {
+  color: #fff;
+}
+
+.about-page__sections > .about-page__section:nth-child(4n + 2) {
+  background: linear-gradient(135deg, var(--color-primary), #111111);
+}
+
+.about-page__sections > .about-page__section:nth-child(4n) {
+  background: linear-gradient(315deg, var(--color-primary), #111111);
 }
 
 .about-page__section-inner {
@@ -89,12 +97,36 @@
   color: var(--color-text);
 }
 
+.about-page__sections > .about-page__section:nth-child(even) .about-page__section-title,
+.about-page__sections > .about-page__section:nth-child(even) .about-page__section-subtitle,
+.about-page__sections > .about-page__section:nth-child(even) .about-page__section-description {
+  color: #fff;
+}
+
 .about-page__section-description {
   white-space: pre-line;
 }
 
 .about-page__section-subtitle {
   font-weight: 700;
+}
+
+.about-page__scroll-cue {
+  position: absolute;
+  right: 50%;
+  bottom: var(--spacing-lg);
+  width: 1rem;
+  height: 1rem;
+  border-right: 0.2rem solid var(--color-primary);
+  border-bottom: 0.2rem solid var(--color-primary);
+  transform: translateX(50%) rotate(45deg);
+  animation: about-page-scroll-cue 1.4s ease-in-out infinite;
+}
+
+@keyframes about-page-scroll-cue {
+  50% {
+    transform: translate(50%, 0.5rem) rotate(45deg);
+  }
 }
 
 .about-page__sr-only {
@@ -137,5 +169,9 @@
 @media (prefers-reduced-motion: reduce) {
   .about-page {
     scroll-behavior: auto;
+  }
+
+  .about-page__scroll-cue {
+    animation: none;
   }
 }

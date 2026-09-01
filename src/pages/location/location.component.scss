@@ -23,7 +23,8 @@
 .location-page__map-panel {
   border: 1px solid var(--color-border);
   border-radius: 0.75rem;
-  background-color: color-mix(in srgb, var(--color-bg) 94%, var(--color-primary) 6%);
+  background-color: var(--color-surface, #ffffff);
+  box-shadow: 0 4px 16px rgba(17, 17, 17, 0.04);
   padding: var(--spacing-lg);
   min-height: calc(100dvh - var(--header-height) - (var(--spacing-xl) * 2));
 }

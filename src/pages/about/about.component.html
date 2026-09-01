@@ -28,6 +28,10 @@
             <p class="about-page__section-description">{{ section.description }}</p>
           </div>
         </div>
+
+        @if (section.order === 1) {
+          <span class="about-page__scroll-cue" aria-hidden="true"></span>
+        }
       </article>
     }
   </div>

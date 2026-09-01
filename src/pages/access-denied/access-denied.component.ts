@@ -87,8 +87,8 @@ export class AccessDeniedComponent {
   }
 
   private isAtLeastTwentyOne(dobIso: string, today: Date): boolean {
-    const dob = new Date(`${dobIso}T00:00:00`);
-    if (Number.isNaN(dob.getTime()) || dob > today) {
+    const dob = this.parseIsoDate(dobIso);
+    if (!dob || dob > today) {
       return false;
     }
 
@@ -104,8 +104,31 @@ export class AccessDeniedComponent {
   }
 
   private isValidPastOrPresentDate(dobIso: string, today: Date): boolean {
-    const dob = new Date(`${dobIso}T00:00:00`);
-    return !Number.isNaN(dob.getTime()) && dob <= today;
+    const dob = this.parseIsoDate(dobIso);
+    return !!dob && dob <= today;
+  }
+
+  private parseIsoDate(dobIso: string): Date | null {
+    const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(dobIso);
+    if (!match) {
+      return null;
+    }
+
+    const year = Number(match[1]);
+    const month = Number(match[2]);
+    const day = Number(match[3]);
+    const date = new Date(`${dobIso}T00:00:00`);
+
+    if (
+      Number.isNaN(date.getTime()) ||
+      date.getFullYear() !== year ||
+      date.getMonth() !== month - 1 ||
+      date.getDate() !== day
+    ) {
+      return null;
+    }
+
+    return date;
   }
 
   private syncBrandIconWidth(): void {

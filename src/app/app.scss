@@ -50,6 +50,7 @@
 .app-nav-link,
 .app-mobile-nav-link {
   color: var(--color-text);
+  font-size: 1.5rem;
   text-decoration: none;
   font-weight: 600;
   transition: color var(--header-motion-duration) ease;
@@ -151,7 +152,7 @@
 }
 
 .app-mobile-nav-link {
-  font-size: 1.125rem;
+  font-size: 2rem;
   text-align: center;
 }
 

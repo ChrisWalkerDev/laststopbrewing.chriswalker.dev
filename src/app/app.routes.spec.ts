@@ -1,4 +1,6 @@
 import { TestBed } from '@angular/core/testing';
+import { provideRouter, Router } from '@angular/router';
+import { RouterTestingHarness } from '@angular/router/testing';
 import { AgeGateRoutingService } from './services/age-gate-routing.service';
 import { AgeGateSessionService } from './services/age-gate-session.service';
 import { routes } from './app.routes';
@@ -8,7 +10,7 @@ describe('app routes age-gate behavior', () => {
     sessionStorage.clear();
 
     TestBed.configureTestingModule({
-      providers: [AgeGateSessionService, AgeGateRoutingService],
+      providers: [provideRouter(routes), AgeGateSessionService, AgeGateRoutingService],
     });
   });
 
@@ -18,6 +20,7 @@ describe('app routes age-gate behavior', () => {
     expect(routes.some((route) => route.path === 'beer')).toBe(true);
     expect(routes.some((route) => route.path === 'about')).toBe(true);
     expect(routes.some((route) => route.path === 'location')).toBe(true);
+    expect(routes.some((route) => route.path === 'contact')).toBe(true);
     expect(routes.some((route) => route.path === 'access-denied')).toBe(true);
   });
 
@@ -61,6 +64,16 @@ describe('app routes age-gate behavior', () => {
     expect(locationRoute?.canActivate?.length).toBeGreaterThan(0);
   });
 
+  it('should configure /contact as a lazy-loaded protected route', () => {
+    const contactRoute = routes.find((route) => route.path === 'contact');
+
+    expect(contactRoute).toBeTruthy();
+    expect(typeof contactRoute?.loadComponent).toBe('function');
+    expect(contactRoute?.component).toBeUndefined();
+    expect(Array.isArray(contactRoute?.canActivate)).toBe(true);
+    expect(contactRoute?.canActivate?.length).toBeGreaterThan(0);
+  });
+
   it('should configure /access-denied as a lazy-loaded route', () => {
     const accessDeniedRoute = routes.find((route) => route.path === 'access-denied');
 
@@ -80,6 +93,24 @@ describe('app routes age-gate behavior', () => {
     expect(session.consumeRequestedDestination()).toBe('/?source=deep-link');
   });
 
+  it('should enforce age-gate decisions through Angular route guards', async () => {
+    const harness = await RouterTestingHarness.create();
+    const router = TestBed.inject(Router);
+    const session = TestBed.inject(AgeGateSessionService);
+
+    await harness.navigateByUrl('/food?source=deep-link');
+    expect(router.url).toBe('/age-gate');
+    expect(session.getRequestedDestination()).toBe('/food?source=deep-link');
+
+    session.setDecision('approved');
+    await harness.navigateByUrl('/food');
+    expect(router.url).toBe('/food');
+
+    session.setDecision('denied');
+    await harness.navigateByUrl('/beer');
+    expect(router.url).toBe('/access-denied');
+  });
+
   it('should block denied state from protected routes and allow /access-denied', () => {
     const routing = TestBed.inject(AgeGateRoutingService);
     const session = TestBed.inject(AgeGateSessionService);
@@ -90,6 +121,7 @@ describe('app routes age-gate behavior', () => {
     const blockedBeer = routing.resolveNavigation('/beer');
     const blockedAbout = routing.resolveNavigation('/about');
     const blockedLocation = routing.resolveNavigation('/location');
+    const blockedContact = routing.resolveNavigation('/contact');
     const allowed = routing.resolveNavigation('/access-denied');
 
     expect(blocked.allow).toBe(false);
@@ -102,6 +134,8 @@ describe('app routes age-gate behavior', () => {
     expect(blockedAbout.redirectTo).toBe('/access-denied');
     expect(blockedLocation.allow).toBe(false);
     expect(blockedLocation.redirectTo).toBe('/access-denied');
+    expect(blockedContact.allow).toBe(false);
+    expect(blockedContact.redirectTo).toBe('/access-denied');
     expect(allowed.allow).toBe(true);
   });
 

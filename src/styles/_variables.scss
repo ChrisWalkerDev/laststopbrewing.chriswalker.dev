@@ -1,9 +1,10 @@
 // SCSS design tokens — exposed as CSS custom properties on :root
 :root {
-  --color-bg: #ffffff;
-  --color-text: #1a1a1a;
-  --color-primary: #1a56db;
-  --color-primary-dark: #1e429f;
+  --color-bg: #f3f5f2;
+  --color-surface: #ffffff;
+  --color-text: #111111;
+  --color-primary: #c10f14;
+  --color-primary-dark: #8c0b10;
   --spacing-base: 1rem;
   --spacing-sm: 0.75rem;
   --spacing-lg: 1.5rem;

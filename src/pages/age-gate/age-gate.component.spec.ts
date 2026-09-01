@@ -54,4 +54,25 @@ describe('AgeGateComponent', () => {
     expect(session.getDecision()).toBe('denied');
     expect(navigateSpy).toHaveBeenCalledWith(ACCESS_DENIED_ROUTE);
   });
+
+  it('should invoke the approval and denial flows from the rendered controls', () => {
+    const fixture = TestBed.createComponent(AgeGateComponent);
+    const router = TestBed.inject(Router);
+    const session = TestBed.inject(AgeGateSessionService);
+    const navigateSpy = vi.spyOn(router, 'navigateByUrl').mockResolvedValue(true);
+
+    session.persistRequestedDestination('/food');
+    fixture.detectChanges();
+
+    const buttons = fixture.nativeElement.querySelectorAll('button') as NodeListOf<HTMLButtonElement>;
+    buttons[0].click();
+
+    expect(session.getDecision()).toBe('approved');
+    expect(navigateSpy).toHaveBeenLastCalledWith('/food');
+
+    buttons[1].click();
+
+    expect(session.getDecision()).toBe('denied');
+    expect(navigateSpy).toHaveBeenLastCalledWith(ACCESS_DENIED_ROUTE);
+  });
 });

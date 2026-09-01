@@ -30,6 +30,11 @@ export const PRIMARY_HEADER_LINKS: HeaderNavLink[] = [
     exact: true,
   },
   {
+    label: 'Contact',
+    route: '/contact',
+    exact: true,
+  },
+  {
     label: 'About',
     route: '/about',
     exact: true,

@@ -26,7 +26,13 @@ describe('AboutComponent', () => {
       ) as NodeListOf<HTMLElement>
     ).map((element) => element.textContent?.trim());
 
-    expect(titles).toEqual(['The Brewery', 'Jon', 'Mike', 'Hunter', 'Hunter']);
+    expect(titles).toEqual([
+      'The Brewery',
+      'Jon Fee',
+      'Mike Sims',
+      'Hunter Monarch',
+      'Hunter Freeman',
+    ]);
   });
 
   it('should render expected role subtitles for each section', () => {
@@ -42,6 +48,27 @@ describe('AboutComponent', () => {
     expect(subtitles).toEqual(['About the brewery', 'Owner', 'Owner', 'Owner', 'Brewer']);
   });
 
+  it('should keep the brewery overview concise and give team history to their profiles', () => {
+    const fixture = TestBed.createComponent(AboutComponent);
+    fixture.detectChanges();
+
+    const descriptions = Array.from(
+      fixture.nativeElement.querySelectorAll(
+        '.about-page__section-description'
+      ) as NodeListOf<HTMLElement>
+    ).map((element) => element.textContent?.trim() ?? '');
+
+    expect(descriptions[0]).toContain('March 17, 2024');
+    expect(descriptions[0].length).toBeLessThan(250);
+    expect(descriptions[1]).toContain('began home brewing in 2007');
+    expect(descriptions[1]).toContain('start Last Stop Brewing');
+    expect(descriptions[2]).toContain('operational experience');
+    expect(descriptions[3]).toContain('General Manager');
+    expect(descriptions[4]).toContain('joined Last Stop Brewing as a bartender');
+    expect(descriptions[4]).toContain('head brewer');
+    expect(descriptions[4]).not.toContain('General Manager');
+  });
+
   it('should render one section image per section with non-empty alt text', () => {
     const fixture = TestBed.createComponent(AboutComponent);
     fixture.detectChanges();
@@ -54,6 +81,7 @@ describe('AboutComponent', () => {
     expect(images.every((image) => image.alt.trim().length > 0)).toBe(true);
     expect(images[0].getAttribute('src')).toContain('assets/about/brewery-20260701.png');
     expect(images[1].getAttribute('src')).toContain('assets/about/jon-owner-20260701.png');
+    expect(images[3].getAttribute('src')).toContain('assets/about/hunter-owner-20260831.png');
   });
 
   it('should place image markup before text markup in each section for mobile-first flow', () => {
@@ -107,6 +135,33 @@ describe('AboutComponent', () => {
 
     expect(stylesText).toContain('scroll-behavior: smooth');
     expect(stylesText).toContain('min-height: calc(100dvh - var(--header-height))');
+  });
+
+  it('should use the Home page section color scheme', () => {
+    const fixture = TestBed.createComponent(AboutComponent);
+    fixture.detectChanges();
+
+    const stylesText = Array.from(document.querySelectorAll('style'))
+      .map((styleTag) => styleTag.textContent ?? '')
+      .join('\n')
+      .replace(/\s+/g, '');
+
+    expect(stylesText).toContain('background-color:var(--color-bg)');
+    expect(stylesText).toContain('linear-gradient(135deg,var(--color-primary),#111111)');
+    expect(stylesText).toContain('linear-gradient(315deg,var(--color-primary),#111111)');
+    expect(stylesText).toContain('color:#fff');
+  });
+
+  it('should render one decorative scroll cue below the first section', () => {
+    const fixture = TestBed.createComponent(AboutComponent);
+    fixture.detectChanges();
+
+    const scrollCues = fixture.nativeElement.querySelectorAll(
+      '.about-page__scroll-cue'
+    ) as NodeListOf<HTMLElement>;
+
+    expect(scrollCues).toHaveLength(1);
+    expect(scrollCues[0].getAttribute('aria-hidden')).toBe('true');
   });
 
   it('should have no axe accessibility violations (WCAG 2.1 AA)', async () => {
