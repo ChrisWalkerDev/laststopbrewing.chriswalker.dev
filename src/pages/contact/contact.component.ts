@@ -9,6 +9,9 @@ import { ReactiveFormsModule, Validators, FormControl, FormGroup } from '@angula
 })
 export class ContactComponent {
   protected readonly submitted = signal(false);
+  protected readonly submitError = signal<string | null>(null);
+
+  private readonly emailServiceUrl = 'https://email-service.chriswalker.dev/';
 
   readonly contactForm = new FormGroup({
     firstName: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
@@ -21,14 +24,42 @@ export class ContactComponent {
     message: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
   });
 
-  protected submit(): void {
+  protected async submit(): Promise<void> {
     if (this.contactForm.invalid) {
       this.contactForm.markAllAsTouched();
       return;
     }
 
-    // Submission is intentionally mocked until the Cloudflare Worker endpoint is available.
-    this.submitted.set(true);
-    this.contactForm.reset();
+    const payload = this.contactForm.getRawValue();
+    this.submitError.set(null);
+    this.submitted.set(false);
+
+    try {
+      const response = await fetch(this.emailServiceUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+          Origin: window.location.origin,
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const result = (await response.json().catch(() => ({}))) as {
+        success?: boolean;
+        error?: string;
+      };
+
+      if (!response.ok || result.success !== true) {
+        throw new Error(result.error ?? 'Unable to send your message right now.');
+      }
+
+      this.contactForm.reset();
+      this.submitted.set(true);
+    } catch (error) {
+      this.submitError.set(
+        error instanceof Error ? error.message : 'Unable to send your message right now.'
+      );
+    }
   }
 }

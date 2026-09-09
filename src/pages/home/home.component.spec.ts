@@ -30,6 +30,16 @@ describe('HomeComponent', () => {
     expect(compiled.querySelectorAll('a').length).toBeGreaterThanOrEqual(2);
   });
 
+  it('should use welcoming copy in the hero introduction', async () => {
+    const fixture = TestBed.createComponent(HomeComponent);
+    await fixture.whenStable();
+    const intro = fixture.nativeElement.querySelector('.home-page__intro') as HTMLElement;
+
+    expect(intro.textContent?.trim()).toBe(
+      'A welcoming taproom where good beer, great food, and easygoing conversation come together.'
+    );
+  });
+
   it('should use the beer asset dimensions for its image metadata', () => {
     const fixture = TestBed.createComponent(HomeComponent);
     const component = fixture.componentInstance;
@@ -160,6 +170,23 @@ describe('HomeComponent', () => {
     const sectionInner = beerSection.querySelector('.home-page__section-inner') as HTMLElement;
 
     expect(sectionInner.firstElementChild?.className).toContain('home-page__media');
+  });
+
+  it('should center stacked section media on mobile', () => {
+    const fixture = TestBed.createComponent(HomeComponent);
+    fixture.detectChanges();
+
+    const stylesText = Array.from(document.querySelectorAll('style'))
+      .map((styleTag) => styleTag.textContent ?? '')
+      .join('\n')
+      .replace(/\s+/g, '');
+
+    expect(stylesText).toMatch(
+      /\.home-page__section--with-media\[[^\]]+\]\.home-page__media\[[^\]]+\]\{justify-self:center/
+    );
+    expect(stylesText).toMatch(
+      /\.home-page__section--with-media\[[^\]]+\]\.home-page__section-inner\[[^\]]+\]\{grid-template-columns:1fr/
+    );
   });
 
   it('should start the first post-hero gradient dark at the bottom left', () => {

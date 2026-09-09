@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { describe, expect, it, vi } from 'vitest';
 import { ContactComponent } from './contact.component';
 
 describe('ContactComponent', () => {
@@ -24,7 +25,7 @@ describe('ContactComponent', () => {
     expect(phoneLink?.getAttribute('href')).toBe('tel:+15024370024');
   });
 
-  it('uses a compact two-column desktop form layout', () => {
+  it('uses a stacked single-column form layout', () => {
     const fixture = TestBed.createComponent(ContactComponent);
     fixture.detectChanges();
 
@@ -33,7 +34,7 @@ describe('ContactComponent', () => {
       .join('\n')
       .replace(/\s+/g, '');
 
-    expect(stylesText).toContain('grid-template-columns:repeat(2,minmax(0,1fr))');
+    expect(stylesText).toContain('grid-template-columns:1fr');
     expect(stylesText).toContain('grid-column:1/-1');
     expect(stylesText).toContain('min-height:6rem');
   });
@@ -50,8 +51,15 @@ describe('ContactComponent', () => {
     expect(fixture.nativeElement.querySelector('.contact-page__confirmation')).toBeNull();
   });
 
-  it('shows a confirmation after a valid mock submission', () => {
+  it('posts a valid submission to the email-service worker', async () => {
     const fixture = TestBed.createComponent(ContactComponent);
+    const fetchSpy = vi.spyOn(window, 'fetch').mockResolvedValue(
+      new Response(JSON.stringify({ success: true }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      })
+    );
+
     fixture.componentInstance.contactForm.setValue({
       firstName: 'Ada',
       lastName: 'Lovelace',
@@ -63,8 +71,27 @@ describe('ContactComponent', () => {
 
     const form = fixture.nativeElement.querySelector('form') as HTMLFormElement;
     form.dispatchEvent(new Event('submit'));
+    await fixture.whenStable();
     fixture.detectChanges();
 
+    expect(fetchSpy).toHaveBeenCalledWith(
+      'https://email-service.chriswalker.dev/',
+      expect.objectContaining({
+        method: 'POST',
+        headers: expect.objectContaining({
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+          Origin: window.location.origin,
+        }),
+        body: JSON.stringify({
+          firstName: 'Ada',
+          lastName: 'Lovelace',
+          email: 'ada@example.com',
+          phone: '',
+          message: 'Hello!',
+        }),
+      })
+    );
     expect(
       fixture.nativeElement.querySelector('.contact-page__confirmation')?.textContent
     ).toContain('Your message has been received.');

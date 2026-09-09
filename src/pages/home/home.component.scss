@@ -255,6 +255,14 @@
     gap: var(--spacing-base);
   }
 
+  .home-page__section--with-media .home-page__section-inner {
+    grid-template-columns: 1fr;
+  }
+
+  .home-page__section--with-media .home-page__media {
+    justify-self: center;
+  }
+
   .home-page__image {
     max-height: min(38dvh, calc(100dvh - var(--header-height) - 12rem));
   }

@@ -13,6 +13,10 @@
     <section class="contact-page__form-panel" aria-labelledby="contact-form-heading">
       <h2 id="contact-form-heading" class="contact-page__form-title">Send a Message</h2>
 
+      @if (submitError()) {
+        <p class="contact-page__error" role="alert">{{ submitError() }}</p>
+      }
+
       @if (submitted()) {
         <p class="contact-page__confirmation" role="status">
           Thanks for reaching out. Your message has been received.
