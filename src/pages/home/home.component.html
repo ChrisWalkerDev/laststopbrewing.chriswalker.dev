@@ -1,9 +1,6 @@
 <section class="home-screen" aria-labelledby="home-screen-heading">
 
-  <div class="home-screen__logo" aria-label="Logo-Heading">
-  </div>
-
-  <!-- <h1 id="home-screen-heading" class="home-screen__sr-only">{{ pageTitle }}</h1> -->
+  <div class="home-screen__logo" aria-label="Logo-Heading"></div>
 
   <div class="home-screen__grid" role="list" aria-label="Apps">
     @for (app of apps; track app.id) {
@@ -16,9 +13,6 @@
         <span class="home-screen__label">{{ app.label }}</span>
       </a>
     }
-  </div>
-
-  <!-- <div class="home-screen__grid home-screen__social" role="list" aria-label="Social media">
     @for (social of socialLinks; track social.id) {
       <a
         class="home-screen__app"
@@ -35,5 +29,6 @@
         <span class="home-screen__label">{{ social.label }}</span>
       </a>
     }
-  </div> -->
+  </div>
+  
 </section>

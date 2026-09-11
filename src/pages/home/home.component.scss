@@ -4,11 +4,12 @@
 
 .home-screen {
   min-height: calc(100dvh - var(--header-height));
+  max-height: calc(100dvh - var(--header-height));
   margin-bottom: calc(-1 * var(--dock-height));
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: var(--spacing-xl) var(--spacing-lg) calc(var(--spacing-xl) + var(--dock-height));
+  padding: 0 0 calc(var(--spacing-xl) + var(--dock-height));
   background-color: var(--color-bg);
   background-image: url('/assets/home/mobile_bg_dark.jpg');
   background-repeat: no-repeat;
@@ -30,6 +31,7 @@
   background-size: contain; 
   width: 100%;
   min-height: 200px;
+  max-width: 425px;
 }
 
 .home-screen__sr-only {
@@ -44,9 +46,12 @@
 .home-screen__grid {
   padding-top: 15px;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--spacing-xl) var(--spacing-lg);
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px 0px;
   width: 100%;
+  max-width: 425px;
+  overflow-y: auto;
+  max-height: 100%;
 }
 
 .home-screen__app {
@@ -78,13 +83,13 @@
   max-width: 96px;
   min-width: 2.5rem;
   aspect-ratio: 1;
-  border-radius: 1.1rem;
+  border-radius: 25%;
   font-size: clamp(1.25rem, 6vw, 2.16rem);
   transition: transform var(--header-motion-duration) ease;
 }
 
 .home-screen__icon--image {
-  max-width: 180px;
+  max-width: 48px;
   height: auto;
   object-fit: contain;
 }
