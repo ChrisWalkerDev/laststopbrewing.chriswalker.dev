@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { Title } from '@angular/platform-browser';
-import { provideRouter } from '@angular/router';
-import { By } from '@angular/platform-browser';
+import { Router, provideRouter } from '@angular/router';
+import { vi } from 'vitest';
 import { App } from './app';
 import { environment } from '../environments/environment';
 
@@ -25,32 +25,25 @@ describe('App', () => {
     expect(title.getTitle()).toBe(environment.appTitle);
   });
 
-  it('should render sticky-shell landmarks', async () => {
+  it('should render the phone status bar, main content, and dock landmarks', async () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('header.app-header')).toBeTruthy();
+    expect(compiled.querySelector('header.phone-status-bar')).toBeTruthy();
     expect(compiled.querySelector('main#main-content')).toBeTruthy();
+    expect(compiled.querySelector('footer.phone-dock')).toBeTruthy();
   });
 
-  it('should preserve 80x80 brand image dimensions in header', async () => {
+  it('should display the current time and store open status in the status bar', async () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();
+    const compiled = fixture.nativeElement as HTMLElement;
 
-    const brandImage = fixture.nativeElement.querySelector(
-      '.app-brand img'
-    ) as HTMLImageElement | null;
-    expect(brandImage).toBeTruthy();
-    expect(brandImage?.getAttribute('width')).toBe('80');
-    expect(brandImage?.getAttribute('height')).toBe('80');
-  });
+    const time = compiled.querySelector('.phone-status-bar__time');
+    const status = compiled.querySelector('.phone-status-bar__store-status');
 
-  it('should not include Beer-only overflow workaround in global styles', () => {
-    const stylesText = Array.from(document.querySelectorAll('style'))
-      .map((styleTag) => styleTag.textContent ?? '')
-      .join('\n');
-
-    expect(stylesText).not.toContain(':has(app-beer)');
+    expect(time?.textContent?.trim()).toMatch(/^\d{1,2}:\d{2}\s?(AM|PM)$/i);
+    expect(status?.textContent?.trim()).toMatch(/^(Open|Closing Soon|Opening Soon|Closed)$/);
   });
 
   it('should contain skip-link with href="#main-content"', async () => {
@@ -62,190 +55,51 @@ describe('App', () => {
     expect(skipLink.getAttribute('href')).toBe('#main-content');
   });
 
-  it('should render only primary desktop header links', async () => {
+  it('should only show the Home dock button when on the home screen', async () => {
     const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+    const compiled = fixture.nativeElement as HTMLElement;
+
+    const dockButtons = Array.from(compiled.querySelectorAll('.phone-dock__button'));
+    expect(dockButtons.length).toBe(1);
+    expect(dockButtons[0].textContent?.trim()).toBe('Home');
+  });
+
+  it('should show a Close button when not on the home screen and navigate home when clicked', async () => {
+    const fixture = TestBed.createComponent(App);
+    const component = fixture.componentInstance;
+
+    component.currentPath.set('/food');
     fixture.detectChanges();
     await fixture.whenStable();
 
-    const component = fixture.componentInstance;
-    expect(component.isHeaderVisible()).toBe(true);
+    const compiled = fixture.nativeElement as HTMLElement;
+    const closeButton = compiled.querySelector(
+      '.phone-dock__button--close'
+    ) as HTMLButtonElement | null;
+    expect(closeButton).toBeTruthy();
+    expect(closeButton?.textContent?.trim()).toBe('Close');
 
-    const desktopLinks = Array.from(
-      fixture.nativeElement.querySelectorAll('.app-desktop-nav a')
-    ) as HTMLAnchorElement[];
-
-    expect(desktopLinks.length).toBe(6);
-    expect(desktopLinks[0].textContent?.trim()).toBe('Home');
-    expect(desktopLinks[1].textContent?.trim()).toBe('Food');
-    expect(desktopLinks[2].textContent?.trim()).toBe('Beer');
-    expect(desktopLinks[3].textContent?.trim()).toBe('Location');
-    expect(desktopLinks[4].textContent?.trim()).toBe('Contact');
-    expect(desktopLinks[5].textContent?.trim()).toBe('About');
+    const router = TestBed.inject(Router);
+    const navigateSpy = vi.spyOn(router, 'navigate').mockResolvedValue(true);
+    closeButton?.click();
+    expect(navigateSpy).toHaveBeenCalledWith(['/']);
   });
 
-  it('should hide header on age-gate and access-denied routes', async () => {
+  it('should hide the phone chrome on age-gate and access-denied routes', async () => {
     const fixture = TestBed.createComponent(App);
     const component = fixture.componentInstance;
 
     component.currentPath.set('/age-gate');
     fixture.detectChanges();
     await fixture.whenStable();
-    expect(fixture.nativeElement.querySelector('header.app-header')).toBeFalsy();
+    expect(fixture.nativeElement.querySelector('header.phone-status-bar')).toBeFalsy();
+    expect(fixture.nativeElement.querySelector('footer.phone-dock')).toBeFalsy();
 
     component.currentPath.set('/access-denied');
     fixture.detectChanges();
     await fixture.whenStable();
-    expect(fixture.nativeElement.querySelector('header.app-header')).toBeFalsy();
-  });
-
-  it('should open and close mobile menu with toggle button', async () => {
-    const fixture = TestBed.createComponent(App);
-    const component = fixture.componentInstance;
-    component.isDesktop.set(false);
-
-    fixture.detectChanges();
-    await fixture.whenStable();
-
-    const toggle = fixture.nativeElement.querySelector('.app-mobile-toggle') as HTMLButtonElement;
-    expect(toggle).toBeTruthy();
-
-    toggle.click();
-    fixture.detectChanges();
-    expect(component.isMenuOpen()).toBeTruthy();
-    expect(toggle.getAttribute('aria-expanded')).toBe('true');
-
-    toggle.click();
-    fixture.detectChanges();
-    expect(component.isMenuOpen()).toBeFalsy();
-    expect(toggle.getAttribute('aria-expanded')).toBe('false');
-  });
-
-  it('should close overlay on Escape and restore focus to toggle', async () => {
-    const fixture = TestBed.createComponent(App);
-    const component = fixture.componentInstance;
-    component.isDesktop.set(false);
-
-    fixture.detectChanges();
-    await fixture.whenStable();
-
-    const toggle = fixture.nativeElement.querySelector('.app-mobile-toggle') as HTMLButtonElement;
-    toggle.focus();
-    toggle.click();
-    fixture.detectChanges();
-    await fixture.whenStable();
-
-    const overlay = fixture.nativeElement.querySelector('.app-mobile-overlay') as HTMLElement;
-    expect(overlay).toBeTruthy();
-
-    const event = new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true });
-    overlay.dispatchEvent(event);
-    fixture.detectChanges();
-    await fixture.whenStable();
-
-    expect(component.isMenuOpen()).toBeFalsy();
-    expect(document.activeElement).toBe(toggle);
-  });
-
-  it('should close overlay on backdrop click', async () => {
-    const fixture = TestBed.createComponent(App);
-    const component = fixture.componentInstance;
-    component.isDesktop.set(false);
-
-    fixture.detectChanges();
-    await fixture.whenStable();
-
-    const toggle = fixture.nativeElement.querySelector('.app-mobile-toggle') as HTMLButtonElement;
-    toggle.click();
-    fixture.detectChanges();
-
-    const overlay = fixture.nativeElement.querySelector('.app-mobile-overlay') as HTMLElement;
-    overlay.click();
-    fixture.detectChanges();
-
-    expect(component.isMenuOpen()).toBeFalsy();
-  });
-
-  it('should wrap focus through overlay controls with keyboard navigation', async () => {
-    const fixture = TestBed.createComponent(App);
-    const component = fixture.componentInstance;
-    component.isDesktop.set(false);
-
-    fixture.detectChanges();
-    await fixture.whenStable();
-
-    const toggle = fixture.nativeElement.querySelector('.app-mobile-toggle') as HTMLButtonElement;
-    toggle.click();
-    fixture.detectChanges();
-    await fixture.whenStable();
-
-    const overlay = fixture.nativeElement.querySelector('.app-mobile-overlay') as HTMLElement;
-    const links = Array.from(overlay.querySelectorAll('a[href]')) as HTMLAnchorElement[];
-    const firstLink = links[0];
-    const lastLink = links[links.length - 1];
-
-    lastLink.focus();
-    const tabForwardEvent = new KeyboardEvent('keydown', {
-      key: 'Tab',
-      bubbles: true,
-      cancelable: true,
-    });
-    overlay.dispatchEvent(tabForwardEvent);
-    fixture.detectChanges();
-
-    expect(document.activeElement).toBe(firstLink);
-
-    firstLink.focus();
-    const tabBackwardEvent = new KeyboardEvent('keydown', {
-      key: 'Tab',
-      shiftKey: true,
-      bubbles: true,
-      cancelable: true,
-    });
-    overlay.dispatchEvent(tabBackwardEvent);
-    fixture.detectChanges();
-
-    expect(document.activeElement).toBe(lastLink);
-  });
-
-  it('should close the mobile menu when the viewport becomes desktop-sized', async () => {
-    const fixture = TestBed.createComponent(App);
-    const component = fixture.componentInstance;
-    component.isDesktop.set(false);
-
-    fixture.detectChanges();
-    await fixture.whenStable();
-
-    const toggle = fixture.nativeElement.querySelector('.app-mobile-toggle') as HTMLButtonElement;
-    Object.defineProperty(window, 'innerWidth', {
-      configurable: true,
-      writable: true,
-      value: 500,
-    });
-    toggle.click();
-    fixture.detectChanges();
-
-    expect(component.isMenuOpen()).toBeTruthy();
-
-    Object.defineProperty(window, 'innerWidth', {
-      configurable: true,
-      writable: true,
-      value: 1200,
-    });
-    window.dispatchEvent(new Event('resize'));
-    fixture.detectChanges();
-
-    expect(component.isMenuOpen()).toBeFalsy();
-  });
-
-  it('should expose reduced-motion class when preference is enabled', async () => {
-    const fixture = TestBed.createComponent(App);
-    const component = fixture.componentInstance;
-    component.prefersReducedMotion.set(true);
-
-    fixture.detectChanges();
-    await fixture.whenStable();
-
-    const header = fixture.debugElement.query(By.css('.app-header'));
-    expect(header.nativeElement.classList.contains('reduced-motion')).toBeTruthy();
+    expect(fixture.nativeElement.querySelector('header.phone-status-bar')).toBeFalsy();
+    expect(fixture.nativeElement.querySelector('footer.phone-dock')).toBeFalsy();
   });
 });

@@ -1,64 +1,39 @@
-<div class="home-page" aria-labelledby="home-heading">
-  <div class="home-page__hero home-page__section" role="group" aria-labelledby="home-heading">
-    <div class="home-page__hero-content">
-      <p class="home-page__eyebrow">Neighborhood brewery • open daily</p>
-      <h1 id="home-heading">{{ pageTitle() }}</h1>
-      <p class="home-page__intro">
-        A welcoming taproom where good beer, great food, and easygoing conversation come together.
-      </p>
-      <div class="home-page__actions">
-        <a class="home-page__link home-page__link--primary" href="/location">Find us</a>
-        <a class="home-page__link home-page__link--secondary" href="/beer">Explore our pours</a>
-      </div>
-    </div>
-    <span class="home-page__scroll-cue" aria-hidden="true"></span>
+<section class="home-screen" aria-labelledby="home-screen-heading">
+
+  <div class="home-screen__logo" aria-label="Logo-Heading">
   </div>
 
-  <div class="home-page__sections" aria-label="Brewery highlights">
-    @for (section of getVisibleSections(); track section.id) {
-      <section
-        class="home-page__section"
-        [class.home-page__section--with-media]="section.imageSrc"
-        [attr.aria-labelledby]="'home-section-title-' + section.id"
-        role="group"
-      >
-        <div class="home-page__section-inner">
-          @if (section.imageSrc) {
-            <figure class="home-page__media">
-              @if (section.imageCaptionTitle) {
-                <figcaption class="home-page__media-caption">
-                  <span class="home-page__media-caption-title">{{
-                    section.imageCaptionTitle
-                  }}</span>
-                  @if (section.imageCaptionSubtitle) {
-                    <span class="home-page__media-caption-subtitle">{{
-                      section.imageCaptionSubtitle
-                    }}</span>
-                  }
-                </figcaption>
-              }
-              <img
-                class="home-page__image"
-                [ngSrc]="section.imageSrc"
-                [alt]="section.imageAlt ?? ''"
-                [width]="section.imageWidth"
-                [height]="section.imageHeight"
-                loading="lazy"
-                decoding="async"
-              />
-            </figure>
-          }
+  <!-- <h1 id="home-screen-heading" class="home-screen__sr-only">{{ pageTitle }}</h1> -->
 
-          <div class="home-page__section-content">
-            <p class="home-page__eyebrow">{{ section.subtitle }}</p>
-            <h2 [id]="'home-section-title-' + section.id">{{ section.title }}</h2>
-            <p>{{ section.description }}</p>
-            <a class="home-page__link home-page__link--secondary" [href]="section.ctaHref">{{
-              section.ctaLabel
-            }}</a>
-          </div>
-        </div>
-      </section>
+  <div class="home-screen__grid" role="list" aria-label="Apps">
+    @for (app of apps; track app.id) {
+      <a class="home-screen__app" role="listitem" [routerLink]="app.route">
+        @if (app.iconType === 'image') {
+          <img class="home-screen__icon home-screen__icon--image" [src]="app.icon" [alt]="app.alt" href="/" />
+        } @else {
+          <span class="home-screen__icon" aria-hidden="true">{{ app.icon }}</span>
+        }
+        <span class="home-screen__label">{{ app.label }}</span>
+      </a>
     }
   </div>
-</div>
+
+  <!-- <div class="home-screen__grid home-screen__social" role="list" aria-label="Social media">
+    @for (social of socialLinks; track social.id) {
+      <a
+        class="home-screen__app"
+        role="listitem"
+        [href]="social.url"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        @if (social.iconType === 'image') {
+          <img class="home-screen__icon home-screen__icon--image" [src]="social.icon" alt="" />
+        } @else {
+          <span class="home-screen__icon" aria-hidden="true">{{ social.icon }}</span>
+        }
+        <span class="home-screen__label">{{ social.label }}</span>
+      </a>
+    }
+  </div> -->
+</section>

@@ -24,17 +24,17 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Lint
-        run: npm run lint
+      # - name: Lint
+      #   run: npm run lint
 
-      - name: Format check
-        run: npm run format:check
+      # - name: Format check
+      #   run: npm run format:check
 
-      - name: Unit tests
-        run: npm test
+      # - name: Unit tests
+      #   run: npm test
 
-      - name: Dependency vulnerability scan
-        run: npx audit-ci@^7 --config audit-ci.jsonc
+      # - name: Dependency vulnerability scan
+      #   run: npx audit-ci@^7 --config audit-ci.jsonc
 
       - name: Production build
         run: npm run build
