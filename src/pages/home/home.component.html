@@ -1,34 +1,4 @@
-<section class="home-screen" aria-labelledby="home-screen-heading">
-
-  <div class="home-screen__logo" aria-label="Logo-Heading"></div>
-
-  <div class="home-screen__grid" role="list" aria-label="Apps">
-    @for (app of apps; track app.id) {
-      <a class="home-screen__app" role="listitem" [routerLink]="app.route">
-        @if (app.iconType === 'image') {
-          <img class="home-screen__icon home-screen__icon--image" [src]="app.icon" [alt]="app.alt" href="/" />
-        } @else {
-          <span class="home-screen__icon" aria-hidden="true">{{ app.icon }}</span>
-        }
-        <span class="home-screen__label">{{ app.label }}</span>
-      </a>
-    }
-    @for (social of socialLinks; track social.id) {
-      <a
-        class="home-screen__app"
-        role="listitem"
-        [href]="social.url"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        @if (social.iconType === 'image') {
-          <img class="home-screen__icon home-screen__icon--image" [src]="social.icon" alt="" />
-        } @else {
-          <span class="home-screen__icon" aria-hidden="true">{{ social.icon }}</span>
-        }
-        <span class="home-screen__label">{{ social.label }}</span>
-      </a>
-    }
-  </div>
-  
-</section>
+<div class="home">
+  <h1>Home Page</h1>
+  <p>This is a blank home page.</p>
+</div>

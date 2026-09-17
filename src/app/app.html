@@ -1,5 +1,3 @@
-<a class="skip-link" href="#main-content">Skip to main content</a>
-
 @if (isHeaderVisible()) {
   <header class="phone-status-bar" aria-label="Device status">
     <span class="phone-status-bar__time">{{ currentTime() }}</span>
@@ -13,31 +11,27 @@
   </header>
 }
 
-<main id="main-content" [class.with-chrome]="isHeaderVisible()">
+<main id="main-content" [class.with-chrome]="isHeaderVisible()" class="app-main">
   <router-outlet />
 </main>
 
-<!-- @if (isHeaderVisible()) {
-  <footer class="phone-dock" aria-label="App controls">
-    <a
-      class="phone-dock__button phone-dock__button--home"
-      routerLink="/"
-      routerLinkActive="active"
-      [routerLinkActiveOptions]="{ exact: true }"
-      aria-label="Go to Home screen"
-    >
-      <img class="phone-dock__button-icon" src="assets/icons/home.png" alt="" />
-      <span class="phone-dock__button-label">Home</span>
-    </a>
-
-    @if (!isHome()) {
-      <button
-        type="button"
-        class="phone-dock__button phone-dock__button--close"
-        (click)="closeApp()"
-      >
-        Close
-      </button>
-    }
+@if (isHeaderVisible()) {
+  <footer class="app-footer" role="contentinfo">
+    <nav class="app-footer__nav" aria-label="Main navigation">
+      @for (item of footerNavItems; track item.path) {
+        <a
+          routerLink="{{ item.path }}"
+          class="app-footer__link"
+          [class.app-footer__link--active]="item.path === currentPath()"
+          [aria-label]="item.label"
+        >
+          @if (item.path === currentPath()) {
+            <img src="{{ item.activeIcon }}" alt="{{ item.label }}" class="app-footer__icon" />
+          } @else {
+            <img src="{{ item.icon }}" alt="{{ item.label }}" class="app-footer__icon" />
+          }
+        </a>
+      }
+    </nav>
   </footer>
-} -->
+}

@@ -3,7 +3,7 @@ import {
   provideBrowserGlobalErrorListeners,
   provideZonelessChangeDetection,
 } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { provideRouter, withViewTransitions } from '@angular/router';
 
 import { routes } from './app.routes';
 
@@ -14,6 +14,6 @@ export const appConfig: ApplicationConfig = {
     // Opts into Angular's zoneless change detection (Angular 21 default — no zone.js required)
     provideZonelessChangeDetection(),
     // Registers the application route table (see app.routes.ts)
-    provideRouter(routes),
+    provideRouter(routes, withViewTransitions())
   ],
 };

@@ -1,172 +1,33 @@
-// Skip-navigation link — visually hidden until focused (WCAG 2.1 AA SC 2.4.1)
-.skip-link {
-  position: absolute;
-  left: -9999px;
-  top: 0;
-  z-index: 9999;
-  padding: var(--spacing-base);
-  background-color: var(--color-primary);
-  color: #fff;
-  text-decoration: none;
-  border-radius: 0 0 4px 4px;
-
-  &:focus {
-    left: 0;
-  }
+.app-main {
+  padding-bottom: var(--dock-height);
 }
 
-:host {
-  display: block;
-}
-
-.phone-status-bar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: var(--header-z-index);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--spacing-base);
-  min-height: var(--header-height);
-  padding: 0 var(--spacing-lg);
-  background-color: #000;
-  color: #fff;
-  font-variant-numeric: tabular-nums;
-}
-
-.phone-status-bar__time {
-  font-size: 1.25rem;
-  font-weight: 600;
-}
-
-.phone-status-bar__store-status {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.25rem 0.75rem;
-  border-radius: 999px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  background-color: rgb(255 255 255 / 15%);
-
-  &--open {
-    color: #4ade80;
-  }
-
-  &--closing-soon,
-  &--opening-soon {
-    color: #facc15;
-  }
-
-  &--closed {
-    color: var(--color-primary);
-  }
-}
-
-main#main-content {
-  min-height: calc(100dvh - var(--header-height) - var(--dock-height));
-}
-
-main#main-content.with-chrome {
-  margin-top: var(--header-height);
-  margin-bottom: var(--dock-height);
-}
-
-.phone-dock {
+.app-footer {
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
-  z-index: var(--header-z-index);
+  height: var(--dock-height);
+  background-color: #1C1C1C;
+  border-top: 1px solid var(--color-border);
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: var(--spacing-lg);
-  min-height: var(--dock-height);
-  padding: 0 var(--spacing-lg);
-  background-color: transparent;
-}
+  z-index: var(--header-z-index);
 
-.phone-dock__button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--spacing-sm);
-  min-width: 8rem;
-  padding: var(--spacing-sm) var(--spacing-lg);
-  border: 0;
-  border-radius: 999px;
-  background-color: var(--color-bg);
-  color: var(--color-text);
-  font-size: 1.1rem;
-  font-weight: 600;
-  text-decoration: none;
-  cursor: pointer;
-  transition:
-    background-color var(--header-motion-duration) ease,
-    color var(--header-motion-duration) ease;
-
-  &:hover,
-  &:focus-visible {
-    background-color: var(--color-primary);
-    color: #fff;
+  &__nav {
+    width: 100%;
+    max-width: 600px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
   }
 
-  &.active {
-    background-color: var(--color-primary);
-    color: #fff;
-  }
-}
-
-.phone-dock__button--home {
-  flex-direction: column;
-  gap: 0.25rem;
-  min-width: auto;
-  padding: 0;
-  background-color: transparent;
-  color: #fff;
-  font-size: 0.85rem;
-
-  &:hover,
-  &:focus-visible {
-    background-color: transparent;
-    color: #fff;
-
-    .phone-dock__button-icon {
-      transform: scale(1.05);
-    }
-  }
-
-  &.active {
-    background-color: transparent;
-    color: #fff;
-  }
-}
-
-.phone-dock__button-icon {
-  width: 2.75rem;
-  height: 2.75rem;
-  object-fit: contain;
-  transition: transform var(--header-motion-duration) ease;
-}
-
-.phone-dock__button-label {
-  font-weight: 600;
-}
-
-.phone-dock__button--close {
-  background-color: var(--color-primary);
-  color: #fff;
-
-  &:hover,
-  &:focus-visible {
-    background-color: var(--color-primary-dark);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .phone-dock__button {
-    transition: none;
+  &__icon {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+    margin-bottom: 4px;
+    
   }
 }

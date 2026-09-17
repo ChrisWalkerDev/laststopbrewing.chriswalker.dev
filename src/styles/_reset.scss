@@ -20,3 +20,25 @@ svg {
   display: block;
   max-width: 100%;
 }
+
+// ::view-transition-old(root) {
+//   animation: slide-out 2500ms ease-in;
+// }
+
+// ::view-transition-new(root) {
+//   animation: slide-in 2500ms ease-out;
+// }
+
+// @keyframes slide-out {
+//   to {
+//     transform: translateX(-300px);
+//     opacity: 0;
+//   }
+// }
+
+// @keyframes slide-in {
+//   from {
+//     transform: translateX(300px);
+//     opacity: 0;
+//   }
+// }

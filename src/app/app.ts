@@ -11,7 +11,7 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Title } from '@angular/platform-browser';
-import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router';
 import { filter } from 'rxjs';
 import { environment } from '../environments/environment';
 import { routes as appRoutes } from './app.routes';
@@ -22,7 +22,7 @@ const CLOCK_TICK_MS = 30_000;
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, RouterLink, RouterLinkActive],
+  imports: [RouterOutlet, RouterLink],
   templateUrl: './app.html',
   styleUrl: './app.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -31,6 +31,12 @@ export class App {
   readonly currentPath = signal('/');
   readonly isHome = computed(() => this.currentPath() === '/');
   readonly isHeaderVisible = computed(() => isHeaderVisible(this.currentPath(), appRoutes));
+  
+  readonly footerNavItems = [
+    { path: '/', label: 'Home', icon: '/assets/footer/home.svg', activeIcon: '/assets/footer/home_filled.svg' },
+    { path: '/food', label: 'Food Menu', icon: '/assets/footer/food.svg', activeIcon: '/assets/footer/food_filled.svg' },
+    { path: '/beer', label: 'Beer Menu', icon: '/assets/footer/beer.svg', activeIcon: '/assets/footer/beer_filled.svg' },
+  ];
 
   private readonly now = signal(new Date());
   
