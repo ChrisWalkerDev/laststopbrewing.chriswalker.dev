@@ -1,7 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { Title } from '@angular/platform-browser';
-import { Router, provideRouter } from '@angular/router';
-import { vi } from 'vitest';
+import { provideRouter } from '@angular/router';
 import { App } from './app';
 import { environment } from '../environments/environment';
 
@@ -57,8 +56,6 @@ describe('App', () => {
   });
 
   it('should show a Close button when not on the home screen and navigate home when clicked', async () => {
-    const fixture = TestBed.createComponent(App);
-    const component = fixture.componentInstance;
 
     // The footer now shows all navigation icons at all times, so there's no close button
     // This test verifies that we don't have this functionality in our new implementation
