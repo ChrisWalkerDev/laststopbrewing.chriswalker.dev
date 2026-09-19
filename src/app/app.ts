@@ -33,9 +33,11 @@ export class App {
   readonly isHeaderVisible = computed(() => isHeaderVisible(this.currentPath(), appRoutes));
   
   readonly footerNavItems = [
-    { path: '/', label: 'Home', icon: '/assets/footer/home.svg', activeIcon: '/assets/footer/home_filled.svg' },
-    { path: '/food', label: 'Food Menu', icon: '/assets/footer/food.svg', activeIcon: '/assets/footer/food_filled.svg' },
     { path: '/beer', label: 'Beer Menu', icon: '/assets/footer/beer.svg', activeIcon: '/assets/footer/beer_filled.svg' },
+    { path: '/food', label: 'Food Menu', icon: '/assets/footer/food.svg', activeIcon: '/assets/footer/food_filled.svg' },
+    { path: '/', label: 'Home', icon: '/assets/footer/home.svg', activeIcon: '/assets/footer/home_filled.svg' },
+    { path: '/location', label: 'Location', icon: '/assets/footer/location.svg', activeIcon: '/assets/footer/location_filled.svg' },
+    { path: '/about', label: 'About', icon: '/assets/footer/about.svg', activeIcon: '/assets/footer/about_filled.svg' },
   ];
 
   private readonly now = signal(new Date());

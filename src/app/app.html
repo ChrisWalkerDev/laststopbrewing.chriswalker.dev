@@ -17,21 +17,28 @@
 
 @if (isHeaderVisible()) {
   <footer class="app-footer" role="contentinfo">
-    <nav class="app-footer__nav" aria-label="Main navigation">
       @for (item of footerNavItems; track item.path) {
-        <a
-          routerLink="{{ item.path }}"
-          class="app-footer__link"
-          [class.app-footer__link--active]="item.path === currentPath()"
-          [aria-label]="item.label"
-        >
-          @if (item.path === currentPath()) {
-            <img src="{{ item.activeIcon }}" alt="{{ item.label }}" class="app-footer__icon" />
-          } @else {
-            <img src="{{ item.icon }}" alt="{{ item.label }}" class="app-footer__icon" />
-          }
-        </a>
+        <div class="app-footer__section">
+          <div class="app-footer__link">
+            <div
+              class="{{
+                item.path === currentPath() ? 'app-footer__border-active app-footer__icon' : ''
+              }}"
+            ></div>
+          </div>
+          <a
+            routerLink="{{ item.path }}"
+            class="app-footer__link"
+            [class.app-footer__link--active]="item.path === currentPath()"
+            [aria-label]="item.label"
+          >
+            <img
+              src="{{ item.path === currentPath() ? item.activeIcon : item.icon }}"
+              alt="{{ item.label }}"
+              class="app-footer__icon"
+            />
+          </a>
+        </div>
       }
-    </nav>
   </footer>
 }
