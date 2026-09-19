@@ -1,3 +1,38 @@
+.app-header {
+  &__mobile {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    max-height: 25px;
+    background-color: #1c1c1c;
+    display: flex;
+    color: #fff;
+    grid-template-columns: repeat(2, 1fr);
+    justify-content: space-between;
+    padding: 0 16px 0 16px;
+    z-index: var(--header-z-index);
+
+    &__store-status {
+
+      &--open {
+        color: rgb(0, 255, 0);
+      }
+
+      &--closed {
+        color: rgb(255, 0, 0);
+      }
+
+      &--closing-soon,
+      &--opening-soon {
+        color: yellow;
+      }
+
+    }
+
+  }
+}
+
 .app-footer {
   position: fixed;
   bottom: 0;
@@ -17,8 +52,8 @@
   }
 
   &__icon {
-    width: 35px;
-    height: 35px;
+    width: 30px;
+    height: 30px;
     object-fit: contain;
     margin-bottom: 4px;
   }

@@ -43,7 +43,7 @@ export class App {
   private readonly now = signal(new Date());
   
   readonly currentTime = computed(() => formatClockTime(this.now()));
-  readonly storeState = computed<StoreState>(() => getStoreState());
+  readonly storeState = computed<string>(() => getStoreState());
   readonly storeStateStyle = computed<string>(() => getStoreState().toString().replace(' ', '-').toLowerCase());
 
   private readonly title = inject(Title);

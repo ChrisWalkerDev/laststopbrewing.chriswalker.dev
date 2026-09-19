@@ -1,10 +1,10 @@
 @if (isHeaderVisible()) {
-  <header class="phone-status-bar" aria-label="Device status">
-    <span class="phone-status-bar__time">{{ currentTime() }}</span>
+  <header class="app-header__mobile" aria-label="Device status">
+    <span class="app-header__mobile__time">{{ currentTime() }}</span>
 
     <span
-      class="phone-status-bar__store-status"
-      [class]="'phone-status-bar__store-status--' + storeStateStyle()"
+      class="app-header__mobile__store-status"
+      [class]="'app-header__mobile__store-status--' + storeStateStyle()"
     >
       {{ storeState() }}
     </span>
