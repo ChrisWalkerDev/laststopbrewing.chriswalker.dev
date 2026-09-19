@@ -17,6 +17,7 @@ import { environment } from '../environments/environment';
 import { routes as appRoutes } from './app.routes';
 import { isHeaderVisible, normalizeAppPath } from './services/app-shell-policy';
 import { formatClockTime, getCurrentTimeInShelbyvilleKy, getStoreState, StoreState } from './services/location-hours';
+import { AgeGateSessionService } from './services/age-gate-session.service';
 
 const CLOCK_TICK_MS = 30_000;
 
@@ -29,8 +30,9 @@ const CLOCK_TICK_MS = 30_000;
 })
 export class App {
   readonly currentPath = signal('/');
-  readonly isHome = computed(() => this.currentPath() === '/');
-  readonly isHeaderVisible = computed(() => isHeaderVisible(this.currentPath(), appRoutes));
+  private readonly ageGateSession = inject(AgeGateSessionService);
+  readonly isAgeGateApproved = computed(() => this.ageGateSession.getDecision() === 'approved');
+  readonly isHeaderVisible = computed(() => this.isAgeGateApproved() && isHeaderVisible(this.currentPath(), appRoutes));
   
   readonly footerNavItems = [
     { path: '/beer', label: 'Beer Menu', icon: '/assets/footer/beer.svg', activeIcon: '/assets/footer/beer_filled.svg' },
