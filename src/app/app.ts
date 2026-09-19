@@ -32,7 +32,7 @@ export class App {
   readonly currentPath = signal('/');
   private readonly ageGateSession = inject(AgeGateSessionService);
   readonly isAgeGateApproved = computed(() => this.ageGateSession.getDecision() === 'approved');
-  readonly isHeaderVisible = computed(() => this.isAgeGateApproved() && isHeaderVisible(this.currentPath(), appRoutes));
+  readonly isHeaderVisible = computed(() => isHeaderVisible(this.currentPath(), appRoutes));
   
   readonly footerNavItems = [
     { path: '/beer', label: 'Beer Menu', icon: '/assets/footer/beer.svg', activeIcon: '/assets/footer/beer_filled.svg' },

@@ -1,4 +1,4 @@
-import { Injectable, PLATFORM_ID, inject } from '@angular/core';
+import { Injectable, PLATFORM_ID, inject, signal } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import {
   ACCESS_DENIED_ROUTE,
@@ -12,17 +12,17 @@ import {
 @Injectable({ providedIn: 'root' })
 export class AgeGateSessionService {
   private readonly platformId = inject(PLATFORM_ID);
+  private readonly decision = signal<AgeVerificationDecision>(
+    this.parseDecision(this.readValue(AGE_GATE_DECISION_KEY))
+  );
+  readonly decision$ = this.decision.asReadonly();
 
   getDecision(): AgeVerificationDecision {
-    const decision = this.readValue(AGE_GATE_DECISION_KEY);
-    if (decision === 'approved' || decision === 'denied') {
-      return decision;
-    }
-
-    return 'unconfirmed';
+    return this.decision();
   }
 
   setDecision(decision: Extract<AgeVerificationDecision, 'approved' | 'denied'>): void {
+    this.decision.set(decision);
     this.writeValue(AGE_GATE_DECISION_KEY, decision);
   }
 
@@ -99,6 +99,10 @@ export class AgeGateSessionService {
     } catch {
       return null;
     }
+  }
+
+  private parseDecision(value: string | null): AgeVerificationDecision {
+    return value === 'approved' || value === 'denied' ? value : 'unconfirmed';
   }
 
   private writeValue(key: string, value: string): void {
