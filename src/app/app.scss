@@ -1,5 +1,5 @@
 .app-main {
-  padding-bottom: var(--dock-height);
+  // padding-bottom: var(--dock-height);
 }
 
 .app-footer {
@@ -24,8 +24,8 @@
   }
 
   &__icon {
-    width: 48px;
-    height: 48px;
+    width: 35px;
+    height: 35px;
     object-fit: contain;
     margin-bottom: 4px;
     

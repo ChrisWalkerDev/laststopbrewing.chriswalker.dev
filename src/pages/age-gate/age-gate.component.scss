@@ -9,13 +9,17 @@
   text-align: center;
 }
 
+.age-gate__heading {
+  color: var(--color-white);
+}
+
 .age-gate__brand-icon {
   margin: 0 auto;
   height: auto;
 }
 
 .age-gate__description {
-  color: #4b5563;
+  color: var(--color-white);
 }
 
 .age-gate__actions {

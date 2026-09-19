@@ -1,7 +1,7 @@
 <section class="age-gate" aria-labelledby="age-gate-heading">
   <img
     class="age-gate__brand-icon"
-    ngSrc="favicon.ico"
+    ngSrc="assets/age-gate/LastStopBrewingLogo_White.png"
     width="64"
     height="64"
     [style.width.px]="brandIconWidthPx()"
@@ -9,7 +9,7 @@
     priority
   />
 
-  <h1 id="age-gate-heading" #ageGateHeadingElement>
+  <h1 id="age-gate-heading" class="age-gate__heading" #ageGateHeadingElement>
     {{ promptText() }}
   </h1>
 
