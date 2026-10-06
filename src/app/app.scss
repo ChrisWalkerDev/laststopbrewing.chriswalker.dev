@@ -14,7 +14,6 @@
     z-index: var(--header-z-index);
 
     &__store-status {
-
       &--open {
         color: rgb(0, 255, 0);
       }
@@ -27,9 +26,7 @@
       &--opening-soon {
         color: yellow;
       }
-
     }
-
   }
 }
 
@@ -62,10 +59,17 @@
     min-height: 1px;
     display: grid;
     grid-template-rows: 1px 1fr;
+    background-color: #1c1c1c;
+  }
+
+  &__border {
+    width: 30px;
+    height: 30px;
+    height: 1px;
+    background-color: #1c1c1c;
   }
 
   &__border-active {
-    height: 1px;
     background-color: #fff;
   }
 }
