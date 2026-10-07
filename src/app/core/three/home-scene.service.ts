@@ -49,12 +49,12 @@ export class HomeSceneService {
   private destroyed = false;
   private framed = false;
 
-  private readonly introDurationMs = 6000;
+  private readonly introDurationMs = 5000;
   private readonly introOrbitRadians = Math.PI * 2;
   // Distances are multiples of the framed (final) camera distance.
-  private readonly introStartDistanceScale = 2.4;
+  private readonly introStartDistanceScale = 3;
   // Polar angle (from straight up) is reduced by this much at the start, i.e. the camera begins high.
-  private readonly introStartPolarOffset = THREE.MathUtils.degToRad(48);
+  private readonly introStartPolarOffset = THREE.MathUtils.degToRad(30);
   private readonly introMinPolar = THREE.MathUtils.degToRad(12);
   private introActive = false;
   private introStartTime?: number;
@@ -225,6 +225,8 @@ export class HomeSceneService {
     this.controls.enableDamping = true;
     this.controls.minDistance = 2;
     this.controls.maxDistance = 14;
+    // Keep the camera at or above the focal point's height.
+    this.controls.maxPolarAngle = Math.PI / 2;
 
     const dracoLoader = new DRACOLoader();
     dracoLoader.setDecoderPath('/draco/');
