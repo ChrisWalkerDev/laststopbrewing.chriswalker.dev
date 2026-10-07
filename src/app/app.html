@@ -1,4 +1,4 @@
-@if (isAgeGateApproved() && isHeaderVisible()) {
+<!-- @if (isAgeGateApproved() && isHeaderVisible()) {
   <header class="app-header__mobile" aria-label="Device status">
     <span class="app-header__mobile__time">{{ currentTime() }}</span>
 
@@ -9,13 +9,13 @@
       {{ storeState() }}
     </span>
   </header>
-}
+} -->
 
 <main id="main-content" [class.with-chrome]="isAgeGateApproved() && isHeaderVisible()" class="app-main">
   <router-outlet />
 </main>
 
-@if (isAgeGateApproved() && isHeaderVisible()) {
+<!-- @if (isAgeGateApproved() && isHeaderVisible()) {
   <footer class="app-footer" role="contentinfo">
       @for (item of footerNavItems; track item.path) {
         <div class="app-footer__section">
@@ -41,4 +41,4 @@
         </div>
       }
   </footer>
-}
+} -->

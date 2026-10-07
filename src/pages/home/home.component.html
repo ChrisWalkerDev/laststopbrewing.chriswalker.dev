@@ -1,4 +1,19 @@
-<div class="home">
-  <h1>Home Page</h1>
-  <p>This is a blank home page.</p>
-</div>
+<section class="home-page" aria-label="Last Stop Brewing">
+  <div #sceneContainer class="home-page__scene" aria-hidden="true"></div>
+
+  @if (homeScene.error(); as sceneError) {
+    <section class="home-page__content">
+      <h1 id="home-page-title">Last Stop Brewing</h1>
+      <p>Great beer, good food, and a place to gather.</p>
+
+      <nav class="home-page__navigation" aria-label="Explore Last Stop Brewing">
+        <a routerLink="/beer">Beer</a>
+        <a routerLink="/food">Food</a>
+        <a routerLink="/about">About</a>
+        <a routerLink="/location">Location</a>
+        <a routerLink="/contact">Contact</a>
+      </nav>
+      <p class="home-page__error" role="status">{{ sceneError }}</p>
+    </section>
+  }
+</section>

@@ -1,29 +1,25 @@
-import { DOCUMENT } from '@angular/common';
-import { isPlatformBrowser } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
   DestroyRef,
-  PLATFORM_ID,
   computed,
   inject,
   signal,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Title } from '@angular/platform-browser';
-import { NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router';
+import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { filter } from 'rxjs';
 import { environment } from '../environments/environment';
 import { routes as appRoutes } from './app.routes';
 import { isHeaderVisible, normalizeAppPath } from './services/app-shell-policy';
-import { formatClockTime, getCurrentTimeInShelbyvilleKy, getStoreState, StoreState } from './services/location-hours';
 import { AgeGateSessionService } from './services/age-gate-session.service';
 
 const CLOCK_TICK_MS = 30_000;
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, RouterLink],
+  imports: [RouterOutlet],
   templateUrl: './app.html',
   styleUrl: './app.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -34,49 +30,18 @@ export class App {
   readonly isAgeGateApproved = computed(() => this.ageGateSession.getDecision() === 'approved');
   readonly isHeaderVisible = computed(() => isHeaderVisible(this.currentPath(), appRoutes));
   
-  readonly footerNavItems = [
-    { path: '/beer', label: 'Beer Menu', icon: '/assets/footer/beer.svg', activeIcon: '/assets/footer/beer_filled.svg' },
-    { path: '/food', label: 'Food Menu', icon: '/assets/footer/food.svg', activeIcon: '/assets/footer/food_filled.svg' },
-    { path: '/', label: 'Home', icon: '/assets/footer/home.svg', activeIcon: '/assets/footer/home_filled.svg' },
-    { path: '/location', label: 'Location', icon: '/assets/footer/location.svg', activeIcon: '/assets/footer/location_filled.svg' },
-    { path: '/about', label: 'About', icon: '/assets/footer/about.svg', activeIcon: '/assets/footer/about_filled.svg' },
-  ];
-
-  private readonly now = signal(new Date());
-  
-  readonly currentTime = computed(() => formatClockTime(this.now()));
-  readonly storeState = computed<string>(() => getStoreState());
-  readonly storeStateStyle = computed<string>(() => getStoreState().toString().replace(' ', '-').toLowerCase());
-
   private readonly title = inject(Title);
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
-  private readonly document = inject(DOCUMENT);
-  private readonly platformId = inject(PLATFORM_ID);
 
   constructor() {
     this.title.setTitle(environment.appTitle);
     this.currentPath.set(normalizeAppPath(this.router.url));
-    this.initializeClock();
     this.initializeRouteListener();
   }
 
   closeApp(): void {
     this.router.navigate(['/']);
-  }
-
-  private initializeClock(): void {
-    if (!isPlatformBrowser(this.platformId)) {
-      return;
-    }
-
-    const windowRef = this.document.defaultView;
-    if (!windowRef) {
-      return;
-    }
-
-    const intervalId = windowRef.setInterval(() => this.now.set(getCurrentTimeInShelbyvilleKy()), CLOCK_TICK_MS);
-    this.destroyRef.onDestroy(() => windowRef.clearInterval(intervalId));
   }
 
   private initializeRouteListener(): void {
