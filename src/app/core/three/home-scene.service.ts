@@ -16,6 +16,10 @@ const HOTSPOT_ROUTES: Readonly<Record<string, string>> = {
   Beer_Stave: '/beer',
   'Food Stave': '/food',
   Food_Stave: '/food',
+  'Contact Stave': '/contact',
+  Contact_Stave: '/contact',
+  'About Stave': '/about',
+  About_Stave: '/about',
 };
 
 function getHotspotRoute(name: string): string | undefined {
