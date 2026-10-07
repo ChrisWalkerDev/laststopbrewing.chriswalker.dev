@@ -49,7 +49,24 @@ export class HomeSceneService {
   private destroyed = false;
   private framed = false;
 
+  private readonly introDurationMs = 6000;
+  private readonly introOrbitRadians = Math.PI * 2;
+  // Distances are multiples of the framed (final) camera distance.
+  private readonly introStartDistanceScale = 2.4;
+  // Polar angle (from straight up) is reduced by this much at the start, i.e. the camera begins high.
+  private readonly introStartPolarOffset = THREE.MathUtils.degToRad(48);
+  private readonly introMinPolar = THREE.MathUtils.degToRad(12);
+  private introActive = false;
+  private introStartTime?: number;
+  private readonly introTarget = new THREE.Vector3();
+  private readonly introEnd = new THREE.Spherical();
+  private readonly introCurrent = new THREE.Spherical();
+  private readonly introOffset = new THREE.Vector3();
+
   private readonly onPointerMove = (event: PointerEvent): void => {
+    if (this.introActive) {
+      return;
+    }
     const intersection = this.findHotspot(event);
     this.hoveredHotspot.set(intersection?.name ?? null);
     if (this.renderer) {
@@ -58,7 +75,7 @@ export class HomeSceneService {
   };
 
   private readonly onPointerDown = (event: PointerEvent): void => {
-    if (event.button !== 0) {
+    if (this.introActive || event.button !== 0) {
       return;
     }
 
@@ -109,9 +126,10 @@ export class HomeSceneService {
     if (!this.framed && this.model && this.camera) {
       this.controls?.target.copy(frameModel(this.model, this.camera));
       this.framed = true;
+      this.prepareIntro();
     }
     if (this.controls) {
-      this.controls.enabled = true;
+      this.controls.enabled = !this.introActive;
     }
     this.startRenderLoop();
   }
@@ -130,6 +148,7 @@ export class HomeSceneService {
     }
 
     this.hoveredHotspot.set(null);
+    this.introStartTime = undefined;
     if (this.controls) {
       this.controls.enabled = false;
     }
@@ -310,17 +329,73 @@ export class HomeSceneService {
     }
 
     this.zone.runOutsideAngular(() => {
-      const render = (): void => {
+      const render = (now: number): void => {
         this.animationFrameId = undefined;
         if (!this.container || !this.renderer || !this.scene || !this.camera) {
           return;
         }
-        this.controls?.update();
+        if (this.introActive) {
+          this.updateIntro(now);
+        } else {
+          this.controls?.update();
+        }
         this.renderer.render(this.scene, this.camera);
         this.animationFrameId = requestAnimationFrame(render);
       };
       this.animationFrameId = requestAnimationFrame(render);
     });
+  }
+
+  private prepareIntro(): void {
+    const camera = this.camera;
+    const controls = this.controls;
+    if (!camera || !controls || globalThis.matchMedia?.('(prefers-reduced-motion: reduce)').matches) {
+      return;
+    }
+
+    // The framed camera pose is the final pose; the intro is derived from it.
+    this.introTarget.copy(controls.target);
+    this.introOffset.copy(camera.position).sub(this.introTarget);
+    this.introEnd.setFromVector3(this.introOffset);
+    this.introStartTime = undefined;
+    this.introActive = true;
+    controls.enabled = false;
+    this.applyIntroPose(0);
+  }
+
+  private updateIntro(now: number): void {
+    this.introStartTime ??= now;
+    const progress = THREE.MathUtils.clamp((now - this.introStartTime) / this.introDurationMs, 0, 1);
+    this.applyIntroPose(progress);
+
+    if (progress >= 1) {
+      this.introActive = false;
+      if (this.controls) {
+        this.controls.enabled = true;
+        this.controls.update();
+      }
+    }
+  }
+
+  private applyIntroPose(progress: number): void {
+    const camera = this.camera;
+    if (!camera) {
+      return;
+    }
+
+    // Smootherstep ease-in-out: zero velocity at both ends.
+    const eased = progress * progress * progress * (progress * (progress * 6 - 15) + 10);
+    const end = this.introEnd;
+    const startPhi = Math.max(end.phi - this.introStartPolarOffset, this.introMinPolar);
+    const remaining = 1 - eased;
+
+    this.introCurrent.set(
+      THREE.MathUtils.lerp(end.radius * this.introStartDistanceScale, end.radius, eased),
+      end.phi + (startPhi - end.phi) * remaining,
+      end.theta + this.introOrbitRadians * remaining
+    );
+    camera.position.copy(this.introOffset.setFromSpherical(this.introCurrent)).add(this.introTarget);
+    camera.lookAt(this.introTarget);
   }
 
   private stopRenderLoop(): void {
