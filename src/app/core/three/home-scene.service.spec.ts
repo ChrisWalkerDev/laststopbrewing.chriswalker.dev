@@ -5,7 +5,7 @@ import { HomeSceneService } from './home-scene.service';
 
 const threeMocks = vi.hoisted(() => ({
   loadAsync: vi.fn(),
-  intersectObjects: vi.fn((): { object: { name: string } }[] => []),
+  intersectObjects: vi.fn((): { object: { name: string; parent?: { name: string } } }[] => []),
   renderers: [] as {
     domElement: HTMLCanvasElement;
     setPixelRatio: ReturnType<typeof vi.fn>;
@@ -143,7 +143,12 @@ describe('HomeSceneService', () => {
   let nextFrameId: number;
 
   const makeModel = (names: string[]) => {
-    const hotspots = names.map((name) => ({ name }));
+    const hotspots = names.map((name) => ({
+      name,
+      traverse: (callback: (object: { name: string }) => void) => {
+        callback({ name });
+      },
+    }));
     return {
       hotspots,
       scene: {
@@ -275,7 +280,7 @@ describe('HomeSceneService', () => {
   });
 
   it('navigates only through the explicit route mapping for discovered hotspots', async () => {
-    const model = makeModel(['hotspot_about', 'hotspot_untrusted', 'Beer Stave']);
+    const model = makeModel(['hotspot_about', 'hotspot_untrusted', 'Beer_Stave', 'Events_Stave']);
     threeMocks.loadAsync.mockResolvedValue(model);
     const container = makeContainer();
     await service.attach(container);
@@ -292,6 +297,18 @@ describe('HomeSceneService', () => {
     threeMocks.intersectObjects.mockReturnValue([{ object: model.hotspots[2] }]);
     canvas.dispatchEvent(new MouseEvent('pointerdown', { button: 0, clientX: 50, clientY: 50 }));
     expect(navigateByUrl).toHaveBeenCalledWith('/beer');
+
+    navigateByUrl.mockClear();
+    threeMocks.intersectObjects.mockReturnValue([
+      { object: { name: 'Beer_Stave_Label', parent: model.hotspots[2] } },
+    ]);
+    canvas.dispatchEvent(new MouseEvent('pointerdown', { button: 0, clientX: 50, clientY: 50 }));
+    expect(navigateByUrl).toHaveBeenCalledWith('/beer');
+
+    navigateByUrl.mockClear();
+    threeMocks.intersectObjects.mockReturnValue([{ object: model.hotspots[3] }]);
+    canvas.dispatchEvent(new MouseEvent('pointerdown', { button: 0, clientX: 50, clientY: 50 }));
+    expect(navigateByUrl).not.toHaveBeenCalled();
 
     navigateByUrl.mockClear();
     threeMocks.intersectObjects.mockReturnValue([{ object: model.hotspots[1] }]);
@@ -316,6 +333,24 @@ describe('HomeSceneService', () => {
     canvas.dispatchEvent(new MouseEvent('pointermove', { clientX: 50, clientY: 50 }));
 
     expect(service.hoveredHotspot()).toBe('hotspot_about');
+    expect(canvas.style.cursor).toBe('pointer');
+  });
+
+  it('resolves hovered child meshes to their mapped hotspot parent', async () => {
+    const model = makeModel(['Beer_Stave']);
+    threeMocks.loadAsync.mockResolvedValue(model);
+    await service.attach(makeContainer());
+    const canvas = threeMocks.renderers[0].domElement;
+    Object.defineProperty(canvas, 'getBoundingClientRect', {
+      value: () => ({ left: 0, top: 0, width: 100, height: 100 }),
+    });
+    threeMocks.intersectObjects.mockReturnValue([
+      { object: { name: 'Beer_Stave_Groove', parent: model.hotspots[0] } },
+    ]);
+
+    canvas.dispatchEvent(new MouseEvent('pointermove', { clientX: 50, clientY: 50 }));
+
+    expect(service.hoveredHotspot()).toBe('Beer_Stave');
     expect(canvas.style.cursor).toBe('pointer');
   });
 

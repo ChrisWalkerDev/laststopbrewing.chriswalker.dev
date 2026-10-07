@@ -13,9 +13,14 @@ const HOTSPOT_ROUTES: Readonly<Record<string, string>> = {
   hotspot_contact: '/contact',
   hotspot_location: '/location',
   'Beer Stave': '/beer',
+  Beer_Stave: '/beer',
   'Food Stave': '/food',
-  'Events Stave': '/contact',
+  Food_Stave: '/food',
 };
+
+function getHotspotRoute(name: string): string | undefined {
+  return HOTSPOT_ROUTES[name];
+}
 
 @Injectable({
   providedIn: 'root',
@@ -58,7 +63,7 @@ export class HomeSceneService {
     }
 
     const hotspot = this.findHotspot(event);
-    const route = hotspot ? HOTSPOT_ROUTES[hotspot.name] : undefined;
+    const route = hotspot ? getHotspotRoute(hotspot.name) : undefined;
     if (route) {
       void this.router.navigateByUrl(route).catch((error: unknown) => {
         if (isDevMode()) {
@@ -219,12 +224,20 @@ export class HomeSceneService {
 
     this.model = gltf.scene;
     gltf.scene.traverse((object) => {
-      if (Object.hasOwn(HOTSPOT_ROUTES, object.name)) {
-        this.hotspots.push(object);
+      if (getHotspotRoute(object.name)) {
+        this.registerHotspot(object);
       }
     });
     scene.add(gltf.scene);
     this.initialized.set(true);
+  }
+
+  private registerHotspot(root: THREE.Object3D): void {
+    root.traverse((object) => {
+      if (!this.hotspots.includes(object)) {
+        this.hotspots.push(object);
+      }
+    });
   }
 
   private findHotspot(event: PointerEvent): THREE.Object3D | undefined {
@@ -244,7 +257,20 @@ export class HomeSceneService {
       -((event.clientY - bounds.top) / bounds.height) * 2 + 1
     );
     this.raycaster.setFromCamera(this.pointer, camera);
-    return this.raycaster.intersectObjects(this.hotspots, true)[0]?.object;
+    const hit = this.raycaster.intersectObjects(this.hotspots, false)[0]?.object;
+    return hit ? this.findMappedHotspot(hit) : undefined;
+  }
+
+  private findMappedHotspot(object: THREE.Object3D): THREE.Object3D | undefined {
+    let current: THREE.Object3D | null = object;
+    while (current) {
+      if (getHotspotRoute(current.name)) {
+        return current;
+      }
+      current = current.parent;
+    }
+
+    return undefined;
   }
 
   private observeContainer(container: HTMLElement): void {
