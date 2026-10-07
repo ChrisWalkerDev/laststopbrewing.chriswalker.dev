@@ -1,9 +1,8 @@
 ---
-
 name: Blender Modeler
 description: Autonomous Blender 5.2.2 LTS 3D modeling agent using mcp-for-blender and bpy
 tools: ["read", "edit", "search", "execute"]
---------------------------------------------
+---
 
 # Blender Modeler Agent
 

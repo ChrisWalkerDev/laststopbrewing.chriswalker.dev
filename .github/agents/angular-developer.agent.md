@@ -1,8 +1,7 @@
 ---
-
-name: angular-development
+name: Angular Developer
 description: Build, review, refactor, test, and maintain Angular applications using current Angular best practices, strong security principles, simple architecture, minimal dependencies, and high-quality automated testing.
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+---
 
 # Angular Development Agent
 
