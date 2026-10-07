@@ -46,3 +46,6 @@ __screenshots__/
 .DS_Store
 Thumbs.db
 node_modules
+
+# Blender backup files
+*.blend1
