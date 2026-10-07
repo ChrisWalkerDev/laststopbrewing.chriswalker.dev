@@ -4,6 +4,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { frameModel } from './frame-model';
 
 const HOTSPOT_ROUTES: Readonly<Record<string, string>> = {
   hotspot_about: '/about',
@@ -41,6 +42,7 @@ export class HomeSceneService {
   private resizeObserver?: ResizeObserver;
   private animationFrameId?: number;
   private destroyed = false;
+  private framed = false;
 
   private readonly onPointerMove = (event: PointerEvent): void => {
     const intersection = this.findHotspot(event);
@@ -99,6 +101,10 @@ export class HomeSceneService {
     renderer.domElement.addEventListener('pointerdown', this.onPointerDown);
     this.observeContainer(container);
     this.resizeRenderer();
+    if (!this.framed && this.model && this.camera) {
+      this.controls?.target.copy(frameModel(this.model, this.camera));
+      this.framed = true;
+    }
     if (this.controls) {
       this.controls.enabled = true;
     }
@@ -177,6 +183,8 @@ export class HomeSceneService {
 
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setPixelRatio(Math.min(globalThis.devicePixelRatio || 1, 2));
+    // Angular's scoped styles can't reach this canvas, so size it to the container inline.
+    Object.assign(renderer.domElement.style, { display: 'block', width: '100%', height: '100%' });
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
 
@@ -216,25 +224,7 @@ export class HomeSceneService {
       }
     });
     scene.add(gltf.scene);
-    this.frameModel(gltf.scene, camera);
     this.initialized.set(true);
-  }
-
-  private frameModel(model: THREE.Object3D, camera: THREE.PerspectiveCamera): void {
-    const bounds = new THREE.Box3().setFromObject(model);
-    if (bounds.isEmpty()) {
-      return;
-    }
-
-    const center = bounds.getCenter(new THREE.Vector3());
-    const size = bounds.getSize(new THREE.Vector3());
-    const fovRadians = THREE.MathUtils.degToRad(camera.fov);
-    const distance = (Math.max(size.x, size.y) * 0.75) / Math.tan(fovRadians / 2) + size.z / 2;
-
-    camera.position.set(center.x, center.y, center.z + distance);
-    camera.lookAt(center);
-    this.controls?.target.copy(center);
-    this.controls?.update();
   }
 
   private findHotspot(event: PointerEvent): THREE.Object3D | undefined {

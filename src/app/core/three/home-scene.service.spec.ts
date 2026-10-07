@@ -28,8 +28,10 @@ vi.mock('three', () => {
   class PerspectiveCamera {
     aspect = 1;
     fov = 45;
-    position = { set: vi.fn() };
+    position = { set: vi.fn(), add: vi.fn(), distanceTo: vi.fn(() => 1) };
+    matrixWorld = {};
     lookAt = vi.fn();
+    updateMatrixWorld = vi.fn();
     updateProjectionMatrix = vi.fn();
 
     constructor() {
@@ -57,9 +59,18 @@ vi.mock('three', () => {
     x = 0;
     y = 0;
     z = 0;
+    clone = () => this;
+    project = () => this;
+    add = () => this;
+    multiplyScalar = () => this;
+    setFromMatrixColumn = () => this;
+    fromBufferAttribute = () => this;
+    applyMatrix4 = () => this;
   }
 
   class Box3 {
+    min = Object.assign(new Vector3(), { x: 0, y: 0, z: 0 });
+    max = Object.assign(new Vector3(), { x: 2, y: 4, z: 1 });
     setFromObject = vi.fn(() => this);
     isEmpty = vi.fn(() => false);
     getCenter = vi.fn(() => Object.assign(new Vector3(), { x: 1, y: 2, z: 3 }));
@@ -137,6 +148,7 @@ describe('HomeSceneService', () => {
       hotspots,
       scene: {
         name: 'root',
+        updateMatrixWorld: vi.fn(),
         traverse: (callback: (object: { name: string }) => void) => {
           callback({ name: 'root' });
           hotspots.forEach(callback);
