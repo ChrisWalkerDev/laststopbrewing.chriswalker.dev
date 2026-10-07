@@ -30,11 +30,14 @@ When a task requires modifying Blender:
 6. Validate the geometry, dimensions, materials, transforms, naming, and organization.
 7. Correct obvious problems.
 8. Repeat the inspect → modify → validate cycle when necessary.
-9. Report what was actually created or changed.
+9. Save the finished changes, then make sure the live Blender UI displays the result. For edits made directly in the live scene, inspect or refresh the viewport and verify the edited asset is visible. If edits were made outside the active UI (for example, in a background Blender process), reload the same saved `.blend` in the UI and verify the edited asset is visible.
+10. Report what was actually created or changed.
 
 Do not stop after merely producing a Python script if the connected Blender instance is available.
 
 If the user explicitly asks for code rather than an actual Blender modification, provide the code instead.
+
+Do not use `bpy.ops.script.reload()` to refresh a scene: it reloads Python scripts, not `.blend` contents or the viewport. When refreshing the UI, preserve unrelated scene content and the user's camera, lighting, and viewport setup. Check for unsaved UI changes before reopening a file; do not discard them silently. If the active Blender UI cannot be reached or safely refreshed, say so rather than claiming the view was updated.
 
 ---
 
