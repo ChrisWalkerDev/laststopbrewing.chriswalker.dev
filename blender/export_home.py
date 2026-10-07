@@ -34,7 +34,7 @@ bpy.ops.export_scene.gltf(
     export_lights=False,
     export_animations=True,
     export_yup=True,
-    export_draco_mesh_compression_enable=False,
+    export_draco_mesh_compression_enable=True,
     use_visible=True,
 )
 print("EXPORTED", out)
