@@ -4,6 +4,9 @@ import * as THREE from 'three';
  * Positions the camera so the model fits the current viewport aspect and its projected
  * bounds are centered on screen. Returns the point the camera looks at.
  */
+// Fraction of the half-viewport the model's silhouette should fill.
+const FILL = 0.97;
+
 export function frameModel(model: THREE.Object3D, camera: THREE.PerspectiveCamera): THREE.Vector3 {
   const bounds = new THREE.Box3().setFromObject(model);
   const center = bounds.getCenter(new THREE.Vector3());
@@ -38,8 +41,9 @@ export function frameModel(model: THREE.Object3D, camera: THREE.PerspectiveCamer
     return center;
   }
   const target = center.clone();
-  for (let i = 0; i < 3; i++) {
-    const ndc = points.map((point) => point.clone().project(camera));
+  const project = (): THREE.Vector3[] => points.map((point) => point.clone().project(camera));
+  for (let i = 0; i < 8; i++) {
+    const ndc = project();
     const midX = (ndcMin(ndc, 'x') + ndcMax(ndc, 'x')) / 2;
     const midY = (ndcMin(ndc, 'y') + ndcMax(ndc, 'y')) / 2;
     const planeDistance = camera.position.distanceTo(target);
@@ -52,11 +56,24 @@ export function frameModel(model: THREE.Object3D, camera: THREE.PerspectiveCamer
     target.add(pan);
     camera.lookAt(target);
     camera.updateMatrixWorld(true);
+
+    // Dolly so the silhouette nearly touches the viewport edge.
+    const centered = project();
+    const extent = Math.max(
+      (ndcMax(centered, 'x') - ndcMin(centered, 'x')) / 2,
+      (ndcMax(centered, 'y') - ndcMin(centered, 'y')) / 2
+    );
+    if (Number.isFinite(extent) && extent > 0) {
+      const scale = THREE.MathUtils.clamp(extent / FILL, 0.7, 1.4);
+      const offset = camera.position.clone().sub(target).multiplyScalar(scale);
+      camera.position.copy(target).add(offset);
+      camera.lookAt(target);
+      camera.updateMatrixWorld(true);
+    }
   }
 
   return target;
 }
-
 function ndcMin(points: THREE.Vector3[], axis: 'x' | 'y'): number {
   return points.reduce((min, p) => Math.min(min, p[axis]), Infinity);
 }

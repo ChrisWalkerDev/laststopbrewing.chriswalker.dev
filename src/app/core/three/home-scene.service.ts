@@ -4,6 +4,8 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { applyChalkboardText, EXAMPLE_CHALKBOARD_LINES, type ChalkboardWriter } from './chalkboard-text';
+import { getHoursSummary } from '../../services/location-hours';
 import { frameModel } from './frame-model';
 
 const HOTSPOT_ROUTES: Readonly<Record<string, string>> = {
@@ -43,6 +45,7 @@ export class HomeSceneService {
   private renderer?: THREE.WebGLRenderer;
   private controls?: OrbitControls;
   private model?: THREE.Object3D;
+  private chalkboardWriter?: ChalkboardWriter;
   private readonly raycaster = new THREE.Raycaster();
   private readonly pointer = new THREE.Vector2();
   private readonly hotspots: THREE.Object3D[] = [];
@@ -253,6 +256,11 @@ export class HomeSceneService {
         this.registerHotspot(object);
       }
     });
+    this.chalkboardWriter = applyChalkboardText(
+      gltf.scene,
+      [...EXAMPLE_CHALKBOARD_LINES, '', ...getHoursSummary()],
+      !globalThis.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+    );
     scene.add(gltf.scene);
     this.initialized.set(true);
   }
@@ -344,6 +352,8 @@ export class HomeSceneService {
           this.updateIntro(now);
         } else {
           this.controls?.update();
+          // Writing starts once the intro camera move has finished.
+          this.chalkboardWriter?.update(now);
         }
         this.renderer.render(this.scene, this.camera);
         this.animationFrameId = requestAnimationFrame(render);

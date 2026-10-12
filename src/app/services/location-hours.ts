@@ -81,4 +81,33 @@ export function getStoreState(): StoreState {
     return StoreState.OPEN;
 }
 
+function formatHour(time: string): string {
+  const [hour, minute] = time.split(':').map(Number);
+  const date = new Date(2000, 0, 1, hour, minute);
+  return formatClockTime(date).replace(':00', '');
+}
 
+function hoursLines(prefix: string, open: string, close: string | null): string[] {
+  return [`${prefix} ${formatHour(open)}`, close ? `Closes ${formatHour(close)}` : ''].filter(Boolean);
+}
+
+/** Short chalkboard lines (opening, then closing) for today's hours, in Shelbyville, KY time. */
+export function getHoursSummary(): string[] {
+  const now = getCurrentTimeInShelbyvilleKy();
+  const today = now.getDay() as DayOfWeek;
+  const { open, close } = hoursByDay[today];
+  const state = getStoreState();
+
+  if (open && (state === StoreState.OPEN || state === StoreState.CLOSING_SOON)) {
+    return hoursLines('Open since', open, close);
+  }
+
+  const minutes = now.getHours() * 60 + now.getMinutes();
+  const [openHour, openMinute] = (open ?? '00:00').split(':').map(Number);
+  if (open && minutes < openHour * 60 + openMinute) {
+    return hoursLines('Opens', open, close);
+  }
+
+  const tomorrow = hoursByDay[((today + 1) % 7) as DayOfWeek];
+  return tomorrow.open ? hoursLines('Opens tomorrow', tomorrow.open, tomorrow.close) : ['Closed'];
+}
